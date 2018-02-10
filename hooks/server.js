@@ -31,6 +31,11 @@ module.exports = {
 			});
 		}
 	},
+	/**
+	 * stop http instance
+	 * @property {event} event stop
+	 * @property {priority} priority 25
+	 */
 	httpStop: {
 		event: 'stop',
 		priority: 25,
@@ -67,6 +72,11 @@ module.exports = {
 			next();
 		}
 	},
+	/**
+	 * stop https instance
+	 * @property {event} event stop
+	 * @property {priority} priority 25
+	 */
 	httpsStop: {
 		event: 'stop',
 		priority: 25,
