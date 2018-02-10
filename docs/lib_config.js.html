@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>lib/config.js - Documentation</title>
+    <title>lib/Config.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -24,12 +24,12 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Tutorials</li><li class="nav-item"><a href="tutorial-create-api-endpoint.html">create-api-endpoint</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-clout-js_lib_Clout-Clout.html">Clout</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-clout-js_lib_Clout-Clout.html#loadHooksFromDir">loadHooksFromDir</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-clout-js_lib_Clout-Clout.html#registerHook">registerHook</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-clout-js_lib_Clout-Clout.html#reload">reload</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-clout-js_lib_Clout-Clout.html#start">start</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-clout-js_lib_Clout-Clout.html#stop">stop</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-clout-js_lib_Config-Config.html">Config</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-clout-js_lib_Config-Config.html#loadFromDir">loadFromDir</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-clout-js_lib_Config-Config.html#merge">merge</a></span></li><li class="nav-heading">Modules</li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-clout-js_hooks_apis.html">clout-js/hooks/apis</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-clout-js_hooks_config.html">clout-js/hooks/config</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-clout-js_hooks_controllers.html">clout-js/hooks/controllers</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-clout-js_hooks_engines.html">clout-js/hooks/engines</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-clout-js_hooks_middleware.html">clout-js/hooks/middleware</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-clout-js_hooks_models.html">clout-js/hooks/models</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-clout-js_hooks_server.html">clout-js/hooks/server</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-clout-js_lib_Clout.html">clout-js/lib/Clout</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-clout-js_lib_Config.html">clout-js/lib/Config</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-clout-js_lib_Logger.html">clout-js/lib/Logger</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-clout-js_lib_Logger.html#~Logger">Logger</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-clout-js_lib_utils.html">clout-js/lib/utils</a></span></li>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Tutorials</li><li class="nav-item"><a href="tutorial-create-api-endpoint.html">create-api-endpoint</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-clout-js_lib_Clout-Clout.html">Clout</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-clout-js_lib_Clout-Clout.html#addApi">addApi</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-clout-js_lib_Clout-Clout.html#addModule">addModule</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-clout-js_lib_Clout-Clout.html#loadHooksFromDir">loadHooksFromDir</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-clout-js_lib_Clout-Clout.html#registerHook">registerHook</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-clout-js_lib_Clout-Clout.html#reload">reload</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-clout-js_lib_Clout-Clout.html#start">start</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-clout-js_lib_Clout-Clout.html#stop">stop</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-clout-js_lib_Config-Config.html">Config</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-clout-js_lib_Config-Config.html#loadFromDir">loadFromDir</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-clout-js_lib_Config-Config.html#merge">merge</a></span></li><li class="nav-heading">Modules</li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-clout-js_hooks_apis.html">clout-js/hooks/apis</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-clout-js_hooks_config.html">clout-js/hooks/config</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-clout-js_hooks_controllers.html">clout-js/hooks/controllers</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-clout-js_hooks_engines.html">clout-js/hooks/engines</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-clout-js_hooks_middleware.html">clout-js/hooks/middleware</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-clout-js_hooks_models.html">clout-js/hooks/models</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-clout-js_hooks_server.html">clout-js/hooks/server</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-clout-js_lib_Clout.html">clout-js/lib/Clout</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-clout-js_lib_Config.html">clout-js/lib/Config</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-clout-js_lib_Logger.html">clout-js/lib/Logger</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-clout-js_lib_Logger.html#~Logger">Logger</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-clout-js_lib_utils.html">clout-js/lib/utils</a></span></li>
 </nav>
 
 <div id="main">
     
-    <h1 class="page-title">lib/config.js</h1>
+    <h1 class="page-title">lib/Config.js</h1>
     
 
     
@@ -47,12 +47,11 @@
 /**
  * @module clout-js/lib/Config
  */
-const
-	path = require('path'),
-	fs = require('fs-extra'),
-	_ = require('lodash'),
-	utils = require('./utils'),
-	debug = require('debug')('clout:config');
+const path = require('path');
+const fs = require('fs-extra');
+const _ = require('lodash');
+const utils = require('./utils');
+const debug = require('debug')('clout:config');
 
 /**
  * Creates a configuration object
@@ -82,13 +81,13 @@ class Config {
 			globEnv = '*' + this.env + '.js';
 
 		// 1) load default configuration
-		utils.getGlobbedFiles(path.join(dir, globDefault)).forEach( (file) => {
+		utils.getGlobbedFiles(path.join(dir, globDefault)).forEach((file) => {
 			debug('loading config from: %s', file);
 			_.merge(this, require(file));
 		});
 
 		// 2) load env specific configuration
-		utils.getGlobbedFiles(path.join(dir, globEnv)).forEach( (file) => {
+		utils.getGlobbedFiles(path.join(dir, globEnv)).forEach((file) => {
 			debug('loading config from: %s', file);
 			_.merge(this, require(file));
 		});
@@ -120,7 +119,7 @@ module.exports = Config;
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Feb 09 2018 00:10:03 GMT+0000 (GMT) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat Feb 10 2018 16:22:50 GMT+0000 (GMT) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>

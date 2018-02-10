@@ -5,22 +5,23 @@
  */
 const path = require('path');
 const Clout = require('./lib/Clout');
-const {merge} = require('lodash');
 
-const CONF = merge({
-	APPLICATION_DIR: module.parent && path.dirname(module.parent.filename)
-}, {
-	APPLICATION_DIR: process.env.APPLICATION_DIR
-});
+let applicationDir;
+
+if (process.env.APPLICATION_DIR) {
+	applicationDir = process.env.APPLICATION_DIR;
+} else if (module && module.parent) {
+	applicationDir = path.dirname(module.parent.filename);
+}
 
 /**
  * Root application directory
  * @type {path}
  * @return directory that called module first
  */
-if (!CONF.APPLICATION_DIR) {
+if (!applicationDir) {
 	throw new Error('application not found');
 }
 
-module.exports = new Clout(CONF.APPLICATION_DIR);
+module.exports = new Clout(applicationDir);
 module.exports.utils = require('./lib/utils');
