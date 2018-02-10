@@ -1,4 +1,4 @@
-Clout Javascript Framework
+Clout Javascript Framework [![Build Status](https://travis-ci.org/clout-stack/clout-js.svg?branch=master)](https://travis-ci.org/clout-stack/clout-js)
 ===========
 
 ## Install
