@@ -1,3 +1,3 @@
-const clout = require('clout-js');
+const clout = require('../../../');
 
 module.exports = clout;
