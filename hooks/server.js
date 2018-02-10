@@ -23,12 +23,27 @@ module.exports = {
 		fn: function (next) {
 			var self = this,
 				port = process.env.PORT || this.config.http && this.config.http.port || 8080;
-				this.server.http = this.app.listen(port, function () {
-					if (self.server.http.address()) {
-						debug('http server started on port %s', self.server.http.address().port);
-					}
-					next();
-				});
+			this.server.http = this.app.listen(port, function () {
+				if (self.server.http.address()) {
+					debug('http server started on port %s', self.server.http.address().port);
+				}
+				next();
+			});
+		}
+	},
+	httpStop: {
+		event: 'stop',
+		priority: 25,
+		fn: function (next) {
+			let http = this.server.http;
+
+			if (http) {
+				let port = http.address().port;
+				http.close();
+				debug('http server stopped on port %s', port);
+			}
+
+			next();
 		}
 	},
 	/**
@@ -51,5 +66,20 @@ module.exports = {
 			debug('https server started on port %s', this.server.https.address().port);
 			next();
 		}
-	}
+	},
+	httpsStop: {
+		event: 'stop',
+		priority: 25,
+		fn: function (next) {
+			let https = this.server.https;
+
+			if (https) {
+				let port = https.address().port;
+				https.close();
+				debug('https server stopped on port %s', port);
+			}
+
+			next();
+		}
+	},
 };

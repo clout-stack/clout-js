@@ -1,6 +1,6 @@
 const path = require('path');
 const should = require('should');
-let Clout = require('../lib/Clout');
+const Clout = require('../lib/Clout');
 
 const APPLICATION_DIR = path.resolve(__dirname, './fixed/kitchensink');
 

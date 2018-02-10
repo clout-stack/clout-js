@@ -1,4 +1,7 @@
 module.exports = {
     hello: 'world',
-    logToDir: false
+    logToDir: false,
+    session: {
+        secret: 'cloutFTW'
+    }
 };

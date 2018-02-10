@@ -7,10 +7,13 @@
  * Controllers hooks
  * @module clout-js/hooks/controllers
  */
+const path = require('path');
 const debug = require('debug')('clout:hook/controllers');
 const utils = require('../lib/utils');
 const express = require('express');
 const router = express.Router();
+const async = require('async');
+const Q = require('q');
 
 module.exports = {
 	/**
