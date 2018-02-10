@@ -1,9 +1,6 @@
-const path = require('path');
 const should = require('should');
 const request = require('request');
-const Clout = require('../lib/Clout');
-
-const APPLICATION_DIR = path.resolve(__dirname, './fixed/kitchensink');
+const testLib = require('./lib');
 
 describe('API Tests', function () {
     let clout;
@@ -12,7 +9,7 @@ describe('API Tests', function () {
     before(() => {
         process.env.PORT = 8420;
         process.env.NODE_ENV = 'test';
-        clout = new Clout(APPLICATION_DIR);
+        clout = testLib.createInstance();
     });
 
     it('start server', (done) => {
