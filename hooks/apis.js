@@ -10,7 +10,6 @@ const debug = require('debug')('clout:hook/apis');
 const path = require('path');
 const utils = require('../lib/utils');
 const express = require('express');
-const router = express.Router();
 
 const ACCEPT_TYPES = {
 	json: 'application/json',
@@ -21,8 +20,9 @@ const ACCEPT_TYPES = {
  * Load APIs from a file
  * @private
  * @param {string} filePath
+ * @param {object} router express router
  */
-function loadAPI(filePath) {
+function loadAPI(filePath, router) {
 	let groupName = path.basename(filePath).replace('.js', '');
 
 	debug('loading apis from %s', groupName);
@@ -86,11 +86,12 @@ function loadAPI(filePath) {
 /**
  * Finds all the .js Files inside a directory and loads it
  * @private
- * @param {string} dir 
+ * @param {string} dir directory containing APIs
+ * @param {object} router express router
  */
-function loadAPIsFromDirectory(dir) {
+function loadAPIsFromDirectory(dir, router) {
 	var dirs = utils.getGlobbedFiles(path.join(dir, '**/**.js'));
-	dirs.forEach(loadAPI);
+	dirs.forEach(loadAPI, router);
 }
 
 module.exports = {
@@ -103,16 +104,19 @@ module.exports = {
 		event: 'start',
 		priority: 'API',
 		fn: function (next) {
+			let router = express.Router();
+
 			debug('loading apis');
 			// 1) load module hooks
-			this.modules.forEach(function (module) {
-				loadAPIsFromDirectory(path.join(module.path, 'apis'));
+			this.modules.forEach((moduleInfo) => {
+				loadAPIsFromDirectory(path.resolve(moduleInfo.path, 'apis'), router);
 			});
 			// 2) load application hooks
-			loadAPIsFromDirectory(path.join(this.rootDirectory, 'apis'));
+			loadAPIsFromDirectory(path.resolve(this.rootDirectory, 'apis'), router);
+
 			// 3) attach router
-			debug('attached router');
 			this.app.use('/api', router);
+			debug('attached router');
 			next();
 		}
 	}
