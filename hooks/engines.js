@@ -42,6 +42,20 @@ module.exports = {
 	 * @property {event} event start
 	 * @property {priority} priority MIDDLEWARE
 	 */
+	html: {
+		event: 'start',
+		priority: 'MIDDLEWARE',
+		fn: function (next) {
+			debug('adding ejs engine for html');
+			this.app.engines.add('html', require('ejs').__express);
+			next();
+		}
+	},
+	/**
+	 * attach EJS engine
+	 * @property {event} event start
+	 * @property {priority} priority MIDDLEWARE
+	 */
 	ejs: {
 		event: 'start',
 		priority: 'MIDDLEWARE',

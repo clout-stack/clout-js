@@ -29,8 +29,8 @@ module.exports = {
 
 			try {
 				function loadController(dir) {
-					debug('loading controller %s', name);
 					let name = dir.split('controllers/')[1].replace('.js', '');
+					debug('loading controller %s', name);
 					let controller = require(dir);
 
 					if (!controller.path) { return; }

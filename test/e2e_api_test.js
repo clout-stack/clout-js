@@ -9,7 +9,7 @@ const EXAMPLE_ITEM_1 = {
     year: '1994'
 };
 
-describe('API Tests', function () {
+describe('e2e API Tests', function () {
     let clout;
     let serverAddress;
 
