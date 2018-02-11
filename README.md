@@ -1,6 +1,11 @@
 Clout Javascript Framework [![Build Status](https://travis-ci.org/clout-stack/clout-js.svg?branch=master)](https://travis-ci.org/clout-stack/clout-js)
 ===========
 
+## The Vision
+Having developed many server-side services using a wide range of enterprise and open-source frameworks, I realized all of them had one thing in common. They all pushed you to use certain technologies in certain ways.
+
+It all came down to going back to the basics and using express to build any project. Each project had slight variations in packages and thus came the concept of clout-js. A de-coupled event based frameworks that allows you to use whatever technology you would like to use. Modules can be packaged up and re-used in different projects. Even the core-modules such as starting the server could be replaced by writing an override.
+
 ## Install
 ```
 $ npm install clout-js@beta --save
