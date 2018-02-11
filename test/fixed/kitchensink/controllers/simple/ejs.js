@@ -6,6 +6,8 @@ module.exports = {
     method: 'all',
     description: 'Simple EJS Page',
     fn: function fn(req, resp, next) {
-        resp.render('simple/index.ejs');
+        resp.render('simple/index.ejs', {
+            pageTitle: 'EJS Page Title'
+        });
     }
 };

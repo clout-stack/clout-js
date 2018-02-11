@@ -40,7 +40,7 @@ describe('e2e Controller Tests', function () {
     it('load simple page ejs', (done) => {
         request('/simple/ejs')
             .then((response) => {
-                should(response.body).be.equal(SIMPLE_INDEX_HTML);
+                should(response.body).be.equal(SIMPLE_INDEX_HTML.replace('$$pageTitle$$', 'EJS Page Title'));
             })
             .then(() => done());
     });
@@ -48,7 +48,7 @@ describe('e2e Controller Tests', function () {
     it('load simple page hbs', (done) => {
         request('/simple/hbs')
             .then((response) => {
-                should(response.body).be.equal(SIMPLE_INDEX_HTML);
+                should(response.body).be.equal(SIMPLE_INDEX_HTML.replace('$$pageTitle$$', 'HBS Page Title'));
             })
             .then(() => done());
     });
