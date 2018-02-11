@@ -75,19 +75,25 @@ describe('API Tests', function () {
         it('should return an item from /simple/1', (done) => {
             request({ uri: `/api/simple/1`, json: true })
                 .then((response) => {
-                    let item = response.body.data;
+                    let data = response.body.data;
                     should(response.body.code).be.equal(200);
-                    should(item.id).be.deepEqual(1);
+                    should(data.id).be.deepEqual(1);
+                    done();
+                });
+        });
+
+        it('should return html response from /simple/1.html', (done) => {
+            request({ uri: `/api/simple/1.html`, json: true })
+                .then((response) => {
+                    let data = response.body;
+                    should(typeof data).be.equal('string');
                     done();
                 });
         });
 
         it('should delete an item from /simple/1', function (done) {
             request({ uri: `/api/simple/1`, method: 'delete', json: true })
-                .then((response) => {
-                    let item = response.body.data;
-                    return item;
-                })
+                .then((response) => response.body.data)
                 .then(() => request({ uri: `/api/simple`, json: true }))
                 .then((response) => {
                     should(response.body.code).be.equal(200);
