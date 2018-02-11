@@ -21,7 +21,7 @@ $ npm run test
 
 ### Create documentation
 ```bash
-$ npm run jsdoc
+$ npm run gendoc
 ```
 
 ### Run application with this instance
