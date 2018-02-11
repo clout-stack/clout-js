@@ -7,7 +7,7 @@ Having developed many server-side services using a wide range of enterprise and 
 It all came down to going back to the basics and using express to build any project. Each project had slight variations in packages and thus came the concept of clout-js. A de-coupled event based frameworks that allows you to use whatever technology you would like to use. Modules can be packaged up and re-used in different projects. Even the core-modules such as starting the server could be replaced by writing an override.
 
 ## Install
-```
+```bash
 $ npm install clout-js@beta --save
 ```
 
@@ -15,16 +15,22 @@ $ npm install clout-js@beta --save
 These commands should be run in this directory.
 
 ### Run tests
-```npm run test```
+```bash
+$ npm run test
+```
 
 ### Create documentation
-```npm run jsdoc```
+```bash
+$ npm run jsdoc
+```
 
 ### Run application with this instance
-```APPLICATION_PATH=<clout-js-applcaiton> npm run start```
+```bash
+$ APPLICATION_PATH=<clout-js-applcaiton> npm run start
+```
 
 ## Usage
-```
+```node
 const clout = require('clout-js');
 
 clout.start();
@@ -57,14 +63,14 @@ The following folders are default application searchpath.
 ```NODE_ENV=development npm run start```
 
 You can load different configuration files depending on the env variables. For example, the usage of ```NODE_ENV=development``` **(default)** would load the following configuration files into the application;
-- conf/default.js
-- conf/**.development.js
-- conf/development.js
+- ```conf/default.js```
+- ```conf/**.development.js```
+- ```conf/development.js```
 
 Another example is ```NODE_ENV=production``` which would load the following files;
-- conf/default.js
-- conf/**.production.js
-- conf/production.js
+- ```conf/default.js```
+- ```conf/**.production.js```
+- ```conf/production.js```
 
 ## Clout-JS Module List
 | package-name | description |
