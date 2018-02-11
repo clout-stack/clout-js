@@ -1,6 +1,6 @@
 {
   "name": "clout-js",
-  "version": "2.0.0-alpha.1",
+  "version": "2.0.0-beta.1",
   "description": "Clean, simplistic, enterprise grade full-stack NodeJS framework",
   "main": "index.js",
   "scripts": {
@@ -18,6 +18,14 @@
   },
   "engines": {
     "node": ">=v6.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/clout-stack/clout-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/clout-stack/clout-js/issues",
+    "email": "muhammad@dadu.co"
   },
   "author": "Muhammad Dadu",
   "license": "MIT",
