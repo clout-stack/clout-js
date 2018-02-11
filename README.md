@@ -3,7 +3,7 @@ Clout Javascript Framework [![Build Status](https://travis-ci.org/clout-stack/cl
 
 ## Install
 ```
-$ npm install clout-js --save
+$ npm install clout-js@beta --save
 ```
 
 ## Module Development
