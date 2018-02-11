@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>lib/utils.js - Documentation</title>
+    <title>test/lib.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">lib/utils.js</h1>
+    <h1 class="page-title">test/lib.js</h1>
     
 
     
@@ -41,67 +41,101 @@
         <article>
             <pre class="prettyprint source linenums"><code>/*!
  * clout-js
- * Copyright(c) 2015 - 2016 Muhammad Dadu
+ * Copyright(c) 2018 Muhammad Dadu
  * MIT Licensed
  */
-/**
- * Utilities
- * @module clout-js/lib/utils
- */
-const _ = require('lodash');
-const glob = require('glob');
-
-var utils = module.exports = {};
+const path = require('path');
+const request = require('request');
 
 /**
- * get globbed files
- * @param  {string|array} globPatterns glob pattern
- * @return {array}  files 	array of files matching glob
- */
-utils.getGlobbedFiles = function getGlobbedFiles(globPatterns) {
-	var self = this,
-		output = [];
-	if (_.isArray(globPatterns)) {
-		globPatterns.forEach(function (globPattern) {
-			output = _.union(output, self.getGlobbedFiles(globPattern, toRemove));
-		});
-	} else if (_.isString(globPatterns)) {
-		var files = glob(globPatterns, {
-			sync: true
-		});
-		output = _.union(output, files);
-	}
-	return output;
-};
-
-/**
- * Get value from object using string
- * @param  {string} key string representing path
- * @param  {object} obj Object to travel
- * @return {object}     value
+ * Test Helper Lib
+ * @module clout-js/test/lib
  * @example
- * let config = { mysql: { database: 'testdb' } };
- * utils.getValue('mysql.database', config) // testdb
- * utils.getValue('mysql', config).database = 'newdb' // newdb
+ * const testLib = require('clout-js/test/lib');
+ * let clout = testLib.createInstance('./');
+ * clout.on('started', () => {
+ *      console.log(testLib.serverAddress);
+ *      testLib.request({uri: '/api/test', method: 'get', json: true})
+ *          .then((response) => console.log(response.body));
+ * });
  */
-utils.getValue = function getValue(keyString, obj) {
-	let nodes = keyString.split('.');
-	let key = obj;
+const lib = module.exports = {
+    /**
+     * @property { string } applicationDir default clout-js application
+     * @property { string } serverAddress http address for clout-js instance
+     */
+    config: {
+        applicationDir: path.resolve(__dirname, './fixed/kitchensink')
+    },
+    /** clout-js instance */
+    cloutInstance: undefined,
+    /**
+     * create clout-js instance application directory
+     * @param {string?} applicationDir
+     * @return {objet} clout-js instance
+     */
+    createInstance(applicationDir) {
+        if (lib.cloutInstance) {
+            lib.destroyInstance();
+        }
 
-	do {
-		let node = nodes.shift(); // whos the lucky node?
-		let hasNode = key &amp;&amp; key.hasOwnProperty(node);
+        let directory = applicationDir || lib.config.applicationDir;
+        lib.cloutInstance = require(directory);
 
-		if (hasNode) {
-			key = key[node]; // traval
-			continue;
-		}
+        lib.cloutInstance.on('started', () => {
+            let server = lib.cloutInstance.server['http'];
+            if (server) {
+                let port = server.address().port;
+                lib.config.serverAddress = `http://localhost:${port}`;
+            }
+        });
 
-		nodes = []; // derefference nodes
-		key = undefined; // nothing found :(
-	} while (nodes.length > 0);
+        return lib.cloutInstance;
+    },
+    /** destroy all clout-js instances */
+    destroyInstance() {
+        Object.keys(require.cache)
+            .filter((dir) => /[(clout\-js\/index)|(fixed\/kitchensink)]/.test(dir))
+            .forEach((dir) => delete require.cache[dir]);
+    },
+    /**
+     * generates url for APIs
+     * @param {string} path 
+     * @return {string}
+     */
+    createhttpUrl(path) {
+        return lib.config.serverAddress + path;
+    },
+    /**
+     * wrapps request in promise and replaces urls with clout-js instance
+     * @param {array} args
+     * @returns {promise}
+     */
+    request(...args) {
+        return new Promise((resolve, reject) => {
+            if (typeof args[0] === 'string') {
+                args[0] = lib.createhttpUrl(args[0]);
+            } else if (typeof args[0] === 'object') {
+                ['url', 'uri'].forEach((key) => {
+                    if (args[0][key]) {
+                        args[0][key] = lib.createhttpUrl(args[0][key]);
+                    }
+                });
+            }
 
-	return key;
+            if (typeof args[args.length] !== 'function') {
+                args.push(function (error, response, body) {
+                    if (error) {
+                        return reject(error);
+                    }
+
+                    resolve(response);
+                });
+            }
+
+            request(...args);
+        });
+    }
 };
 </code></pre>
         </article>
