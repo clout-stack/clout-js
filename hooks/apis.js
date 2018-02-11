@@ -22,7 +22,7 @@ const ACCEPT_TYPES = {
  * @param {string} filePath
  * @param {object} router express router
  */
-function loadAPI(filePath, router) {
+function loadAPIFromFile(filePath, router) {
 	let groupName = path.basename(filePath).replace('.js', '');
 
 	debug('loading apis from %s', groupName);
@@ -91,7 +91,7 @@ function loadAPI(filePath, router) {
  */
 function loadAPIsFromDirectory(dir, router) {
 	var dirs = utils.getGlobbedFiles(path.join(dir, '**/**.js'));
-	dirs.forEach(loadAPI, router);
+	dirs.forEach((filePath) => loadAPIFromFile(filePath, router));
 }
 
 module.exports = {

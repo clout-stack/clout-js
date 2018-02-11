@@ -32,9 +32,12 @@ module.exports = {
 			// TODO:-
 			//  - move to Clout.js for initialization
 			this.app = express();
-			this.app.set('x-powered-by', 'Clout-JS');
-			this.app.set('env', this.config.env);
-			this.app.set('server', 'Clout-JS v' + this.package.version);
+			this.app.use((req, resp, next) => {
+				resp.setHeader('x-powered-by', 'Clout-JS');
+				resp.setHeader('clout-version', `${this.package.version}`);
+				resp.setHeader('clout-env', this.config.env);
+				next();
+			});
 
 			// request parsing
 			this.app.use(bodyParser.json());
