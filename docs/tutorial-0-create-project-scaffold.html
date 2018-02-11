@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>clout-js/lib/Logger - Documentation</title>
+    <title>0-create-project-scaffold - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,61 +29,48 @@
 
 <div id="main">
     
-    <h1 class="page-title">clout-js/lib/Logger</h1>
+    <h1 class="page-title">0-create-project-scaffold</h1>
     
 
-    
-
-
-
-
-<section>
+    <section>
 
 <header>
-    
-        
     
 </header>
 
 <article>
-    <div class="container-overview">
-    
-        
+    <h1>Create Project Scaffold</h1><blockquote>
+<p>Creating an api shouldn't be complication. We have found you an elegent standardized solution.</p>
+</blockquote>
+<p>1) Create a new project directory and initialize npm and git</p>
+<pre class="prettyprint source lang-bash"><code>mkdir myserver
+cd myserver
+npm init (set server.js as main)
+git init</code></pre><p>2) create the following directories and files</p>
+<ul>
+<li>conf/default.js</li>
+</ul>
+<pre class="prettyprint source lang-node"><code>module.exports = {
+    session: 'mysessionsecret'
+};</code></pre><ul>
+<li>server.js</li>
+</ul>
+<pre class="prettyprint source lang-node"><code>const clout = require('clout-js');
 
-        
-    
-    </div>
+clout.on('started', () => {
+    let server = clout.server['http'];
+    if (server) {
+        let port = server.address().port;
+        console.info('%s server started on port %s', key, port);
+    }
+});
 
-    
-
-    
-
-    
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="module-clout-js_lib_Logger-Logger.html">Logger</a></dt>
-            <dd></dd>
-        </dl>
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
+clout.start();</code></pre><p>2) Install clout-js</p>
+<pre class="prettyprint source lang-bash"><code>npm install clout-js@beta --save</code></pre><p>2) Start the server</p>
+<pre class="prettyprint source"><code>node .</code></pre><p>4) Test it by visiting <a href="http://localhost:8080">http://localhost:8080</a> shoud return a 404 page from clout-js</p>
 </article>
 
 </section>
-
-
-
 
 </div>
 

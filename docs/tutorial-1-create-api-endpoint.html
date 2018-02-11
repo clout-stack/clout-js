@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>clout-js/lib/Logger - Documentation</title>
+    <title>1-create-api-endpoint - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,61 +29,48 @@
 
 <div id="main">
     
-    <h1 class="page-title">clout-js/lib/Logger</h1>
+    <h1 class="page-title">1-create-api-endpoint</h1>
     
 
-    
-
-
-
-
-<section>
+    <section>
 
 <header>
-    
-        
     
 </header>
 
 <article>
-    <div class="container-overview">
-    
-        
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="module-clout-js_lib_Logger-Logger.html">Logger</a></dt>
-            <dd></dd>
-        </dl>
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
+    <h1>Create API Endpoint</h1><blockquote>
+<p>Creating an api shouldn't be complication. We have found you an elegent standardized solution.</p>
+</blockquote>
+<p>1) Create a new file in the <code>api/</code> directory</p>
+<p>2) Add the following to the file
+e.g. hello.js</p>
+<pre class="prettyprint source"><code>module.exports = {
+    get: {
+        path: '/hello',
+        method: 'get',
+        fn(req, resp) {
+            resp.ok('world');
+        }
+    }
+};</code></pre><p>3) Lets create another endpoint</p>
+<pre class="prettyprint source"><code>...
+    anotherGet: {
+        path: '/hello/:postcode:',
+        method: 'get',
+        fn(req, resp) {
+            resp.ok(`world from ${req.params.postcode}`);
+        }
+    }
+...</code></pre><p>4) Lets test it
+After restarting the application, you should be able to call the following urls.</p>
+<ul>
+<li><a href="http://localhost:8080/api/hello">http://localhost:8080/api/hello</a></li>
+<li><a href="http://localhost:8080/api/hello/e11pa">http://localhost:8080/api/hello/e11pa</a></li>
+</ul>
 </article>
 
 </section>
-
-
-
 
 </div>
 
