@@ -1,4 +1,4 @@
-Clout Javascript Framework [![Build Status](https://travis-ci.org/clout-stack/clout-js.svg?branch=master)](https://travis-ci.org/clout-stack/clout-js)
+Clout Javascript Framework [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url]
 ===========
 
 ## The Vision
@@ -83,3 +83,8 @@ Another example is ```NODE_ENV=production``` which would load the following file
 | **[clout-socket-io](https://github.com/clout-js-modules/clout-socket-io)** | Clout module to leverage socket.io |
 | **[clout-sequelize](https://github.com/clout-js-modules/clout-sequelize)** | Clout module to leverage sequelize for models |
 | **[clout-flash](https://github.com/clout-js-modules/clout-flash)** | Flash message middleware module for Clout-JS |
+
+[npm-image]: https://badge.fury.io/js/clout-js.svg
+[npm-url]: https://npmjs.org/package/clout-js
+[travis-image]: https://travis-ci.org/clout-stack/clout-js.svg?branch=master
+[travis-url]: https://travis-ci.org/clout-stack/clout-js
