@@ -49,7 +49,7 @@ function loadAPIFromFile(filePath, router) {
 		}
 
 		// allow .ext
-		let apiPath = `\${api.path}.:acceptType?`;
+		let apiPath = `${api.path}.:acceptType?`;
 
 		var hooks = api.hooks || [],
 			methods = api.methods
