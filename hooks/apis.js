@@ -11,107 +11,139 @@ const path = require('path');
 const utils = require('../lib/utils');
 const express = require('express');
 
-const ACCEPT_TYPES = {
-	json: 'application/json',
-	html: 'text/html'
-};
+const {merge} = require('lodash');
 
-const API_BASE_PATH = '/api';
+class CloutApiRoute {
+	constructor(_opts) {
+		this._opts = _opts;
 
-let apiRoutes;
+		this.path = this._opts.path;
+		this.hooks = this._opts.hooks || [];
+		this.methods = (this._opts.methods || [this._opts.method]).map((method) => method.toLowerCase());
 
-/**
- * Load APIs from a file
- * @private
- * @param {string} filePath
- * @param {object} router express router
- */
-function loadAPIFromFile(filePath, router) {
-	let groupName = path.basename(filePath).replace('.js', '');
+		this.group = this._opts.group;
+		this.name = this._opts.name;
+		this.description = this._opts.description;
+		this.params = this._opts.params; // do something with this maybe
 
-	if (!apiRoutes[groupName]) {
-		apiRoutes[groupName] = [];
+		this.fn = this._opts.fn;
 	}
 
-	debug('loading apis from %s', groupName);
-	try {
-		var apis = require(filePath);
-	} catch (e) {
-		throw new Error(`Error loading api groupName '${groupName}'\n${e}`);
-	}
-	Object.keys(apis).forEach(function loadApi(apiName) {
-		debug('loading api %s:%s', groupName, apiName);
-		let api = apis[apiName];
-		let apiMeta;
+	attachRouter(router) {
+		this.router = router;
 
-		if (!api.path) {
-			return;
-		}
+		return this.methods.forEach((method) => {
+			// it's an endpoint
+			if (this.path) {
+				let path = `${this.path}.:acceptType?`;
 
-		// allow .ext
-		let apiPath = `${api.path}.:acceptType?`;
+				// attach logging
+				this.router[method](path, function (req, resp, next) {
+					req.logger.info('Endpoint [%s] /api%s', req.method, req.path);
+					next();
+				});
 
-		var hooks = api.hooks || [],
-			methods = api.methods
-				? api.methods
-				: [api.method || 'all'];
+				// attach hooks
+				this.hooks.map((hook) => this.router[method](path, hook));
 
-		methods = methods.map((method) => method.toLowerCase());
-
-		// log endpoint request
-		methods.forEach((method) => router[method](apiPath, function (req, res, next) {
-			req.logger.info('Endpoint [%s] /api%s', req.method, req.path);
-			debug('Endpoint [%s] /api%s', req.method, req.path);
-			next();
-		}));
-
-		// load hook first
-		hooks.forEach(function (hook) {
-			if (typeof hook === 'string') {
-				// implement smart hooks
-				return;
+				// execute fn
+				if (this.fn) {
+					this.router[method](path, this.fn);
+				}
 			}
-			methods.forEach((method) => router[method](apiPath, function (req) {
-				hook.name && debug('hook:', hook.name);
-				hook.apply(this, arguments);
-			}));
+			
 		});
-
-		// load api
-		if (api.fn) {
-			methods.forEach((method) => router[method](apiPath, function (req) {
-				debug('loaded endpoint [%s] /api%s', method, apiPath);
-				// allow .ext
-				if (req.params.acceptType && ACCEPT_TYPES[req.params.acceptType]) {
-					var acceptType = ACCEPT_TYPES[req.params.acceptType];
-					debug('acceptType', acceptType);
-					req.headers['accept'] = acceptType + ',' + req.headers['accept'];
-				};
-				debug('loading api %s:%s', groupName, apiName);
-				api.fn.apply(this, arguments);
-			}));
-
-			apiMeta = {
-				path: `${API_BASE_PATH}${api.path}`,
-				methods: methods,
-				params: api.params || {},
-				description: api.description
-			};
-
-			apiRoutes[groupName].push(apiMeta);
-		}
-	});
+	}
 }
 
-/**
- * Finds all the .js Files inside a directory and loads it
- * @private
- * @param {string} dir directory containing APIs
- * @param {object} router express router
- */
-function loadAPIsFromDirectory(dir, router) {
-	var dirs = utils.getGlobbedFiles(path.join(dir, '**/**.js'));
-	dirs.forEach((filePath) => loadAPIFromFile(filePath, router));
+class CloutApiRoutes {
+	constructor(app) {
+		this.clout = app;
+		this.config = {
+			basePath: '/api',
+			acceptTypes: {
+				json: 'application/json',
+				html: 'text/html'
+			}
+		};
+		this.routes = {};
+		this.router = express.Router();
+		this.handleAcceptTypeParams();
+
+		this.clout.logger.debug('Module CloutApiRoutes loaded');
+	}
+
+	handleAcceptTypeParams() {
+		this.router.param('acceptType', (req, resp, next, type) => {
+			let acceptType = this.config.acceptTypes[type];
+
+			req.logger.info(`handling param '${acceptType}'`);
+
+			if (acceptType) {
+				req.headers['accept'] = `${acceptType},` + req.headers['accept'];
+			};
+
+			next();
+		});
+	}
+
+	attachRouter() {
+		let basePath = this.config.basePath;
+
+		this.clout.app.use(basePath, this.router);
+		this.clout.logger.debug(`router attached at ${basePath}`);
+	}
+
+	addRoute(cloutRoute) {
+		if (!this.routes[cloutRoute.group]) {
+			this.routes[cloutRoute.group] = [];
+		}
+
+		this.routes[cloutRoute.group].push(cloutRoute);
+
+		cloutRoute.attachRouter(this.router);
+	}
+
+	/**
+	 * Load APIs from a file
+	 * @private
+	 * @param {string} filePath
+	 * @param {object} router express router
+	 */
+	loadAPIFromFile(filePath) {
+		let groupName = path.basename(filePath).replace('.js', '');
+		let apis = require(filePath);
+
+		this.clout.logger.debug(`loading API from file ${filePath}`);
+
+		return Object.keys(apis).map((apiName) => {
+			let opts = merge({
+				method: 'all',
+				name: apiName,
+				group: groupName
+			}, apis[apiName]);
+
+			return this.addRoute(new CloutApiRoute(opts));
+		});
+	}
+
+	/**
+	 * Finds all the **.js files inside a directory and loads it
+	 * @param {string} dir path containing directory of APIs
+	 */
+	loadAPIsFromDir(dir) {
+		let globbedDirs = utils.getGlobbedFiles(path.join(dir, '**/**.js'));
+
+		return globbedDirs.map((filePath) => this.loadAPIFromFile(filePath));
+	}
+
+	/**
+	 * Finds all the **.js files inside an array of directories and loads it
+	 * @param {array} dirs array of paths containing directory of APIs
+	 */
+	loadAPIsFromDirs(dirs) {
+		return dirs.map((dir) => this.loadAPIsFromDir(dir));
+	}
 }
 
 module.exports = {
@@ -124,22 +156,21 @@ module.exports = {
 		event: 'start',
 		priority: 'API',
 		fn: function (next) {
-			let router = express.Router();
+			let clientApiFolder = path.resolve(this.rootDirectory, 'apis');
+			let apiDirs = this.modules
+				.map((moduleInfo) => path.resolve(moduleInfo.path, 'apis'))
+				.concat([clientApiFolder]);
 
-			apiRoutes = this.apiRoutes = {};
+			if (!this.core) {
+				this.core = {};
+			}
 
-			debug('loading apis');
-			// 1) load module hooks
-			this.modules.forEach((moduleInfo) => {
-				loadAPIsFromDirectory(path.resolve(moduleInfo.path, 'apis'), router);
-			});
-			// 2) load application hooks
-			loadAPIsFromDirectory(path.resolve(this.rootDirectory, 'apis'), router);
+			this.core.api = new CloutApiRoutes(this);
 
-			// 3) attach router
-			this.app.use(API_BASE_PATH, router);
+			this.core.api.loadAPIsFromDirs(apiDirs);
 
-			debug('attached router');
+			this.core.api.attachRouter();
+
 			next();
 		}
 	}
