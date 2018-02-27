@@ -1,13 +1,28 @@
-/**
- * CloutApiRoutes
+/*!
+ * clout-js
+ * Copyright(c) 2018 Muhammad Dadu
+ * MIT Licensed
  */
+/**
+ * @module clout-js/hookslib/CloutApiRoutes
+ */
+
 const { merge } = require('lodash');
 const CloutApiRoute = require('../hookslib/CloutApiRoute');
 const express = require('express');
 const utils = require('../lib/utils');
 const path = require('path');
 
+/**
+ * CloutApiRoutes
+ * @class
+ */
 module.exports = class CloutApiRoutes {
+
+    /**
+     * @constructor
+     * @param {object} app clout instance
+     */
     constructor(app) {
         this.clout = app;
         this.config = {
@@ -19,12 +34,15 @@ module.exports = class CloutApiRoutes {
         };
         this.routes = {};
         this.router = express.Router();
-        this.handleAcceptTypeParams();
+        this.initializeAcceptTypeHandler();
 
         this.clout.logger.debug('Module CloutApiRoutes loaded');
     }
 
-    handleAcceptTypeParams() {
+    /**
+     * Clout-JS handler for custom content requests
+     */
+    initializeAcceptTypeHandler() {
         this.router.param('acceptType', (req, resp, next, type) => {
             let acceptType = this.config.acceptTypes[type];
 
@@ -38,13 +56,20 @@ module.exports = class CloutApiRoutes {
         });
     }
 
-    attachRouter() {
+    /**
+     * Attaches router to clout-app
+     */
+    attachRouterToApp() {
         let basePath = this.config.basePath;
 
         this.clout.app.use(basePath, this.router);
         this.clout.logger.debug(`router attached at ${basePath}`);
     }
 
+    /**
+     * Add CloutApiRouter to router
+     * @param {object} CloutApiRouter
+     */
     addRoute(cloutRoute) {
         if (!this.routes[cloutRoute.group]) {
             this.routes[cloutRoute.group] = [];
@@ -57,9 +82,7 @@ module.exports = class CloutApiRoutes {
 
 	/**
 	 * Load APIs from a file
-	 * @private
 	 * @param {string} filePath
-	 * @param {object} router express router
 	 */
     loadAPIFromFile(filePath) {
         let groupName = path.basename(filePath).replace('.js', '');

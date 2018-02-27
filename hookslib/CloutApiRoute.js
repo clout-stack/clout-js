@@ -1,9 +1,29 @@
-/** 
- * CloutApiRoute
+/*!
+ * clout-js
+ * Copyright(c) 2018 Muhammad Dadu
+ * MIT Licensed
+ */
+/**
+ * @module clout-js/hookslib/CloutApiRoute
  */
 
-
+/**
+ * CloutApiRoute
+ * @class
+ */
 module.exports = class CloutApiRoute {
+    /**
+     * @constructor
+     * @param {object} _opts
+     * @param {string} _opts.path
+     * @param {array} [_opts.hooks]
+     * @param {string} [_opts.method]
+     * @param {array} [_opts.methods]
+     * @param {string} _opts.group
+     * @param {string} _opts.name
+     * @param {string} _opts.description
+     * @param {function} _opts.fn
+     */
     constructor(_opts) {
         this._opts = _opts;
 
@@ -19,6 +39,10 @@ module.exports = class CloutApiRoute {
         this.fn = this._opts.fn;
     }
 
+    /**
+     * attach express router
+     * @param {object} router express router
+     */
     attachRouter(router) {
         this.router = router;
 

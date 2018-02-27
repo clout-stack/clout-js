@@ -29,10 +29,8 @@ module.exports = {
 			}
 
 			this.core.api = new CloutApiRoutes(this);
-
 			this.core.api.loadAPIsFromDirs(apiDirs);
-
-			this.core.api.attachRouter();
+			this.core.api.attachRouterToApp();
 
 			next();
 		}
