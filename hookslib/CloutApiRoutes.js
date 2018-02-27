@@ -1,0 +1,98 @@
+/**
+ * CloutApiRoutes
+ */
+const { merge } = require('lodash');
+const CloutApiRoute = require('../hookslib/CloutApiRoute');
+const express = require('express');
+const utils = require('../lib/utils');
+const path = require('path');
+
+module.exports = class CloutApiRoutes {
+    constructor(app) {
+        this.clout = app;
+        this.config = {
+            basePath: '/api',
+            acceptTypes: {
+                json: 'application/json',
+                html: 'text/html'
+            }
+        };
+        this.routes = {};
+        this.router = express.Router();
+        this.handleAcceptTypeParams();
+
+        this.clout.logger.debug('Module CloutApiRoutes loaded');
+    }
+
+    handleAcceptTypeParams() {
+        this.router.param('acceptType', (req, resp, next, type) => {
+            let acceptType = this.config.acceptTypes[type];
+
+            req.logger.info(`handling param '${acceptType}'`);
+
+            if (acceptType) {
+                req.headers['accept'] = `${acceptType},` + req.headers['accept'];
+            };
+
+            next();
+        });
+    }
+
+    attachRouter() {
+        let basePath = this.config.basePath;
+
+        this.clout.app.use(basePath, this.router);
+        this.clout.logger.debug(`router attached at ${basePath}`);
+    }
+
+    addRoute(cloutRoute) {
+        if (!this.routes[cloutRoute.group]) {
+            this.routes[cloutRoute.group] = [];
+        }
+
+        this.routes[cloutRoute.group].push(cloutRoute);
+
+        cloutRoute.attachRouter(this.router);
+    }
+
+	/**
+	 * Load APIs from a file
+	 * @private
+	 * @param {string} filePath
+	 * @param {object} router express router
+	 */
+    loadAPIFromFile(filePath) {
+        let groupName = path.basename(filePath).replace('.js', '');
+        let apis = require(filePath);
+
+        this.clout.logger.debug(`loading API from file ${filePath}`);
+
+        return Object.keys(apis).map((apiName) => {
+            let opts = merge({
+                method: 'all',
+                name: apiName,
+                group: groupName
+            }, apis[apiName]);
+
+            return this.addRoute(new CloutApiRoute(opts));
+        });
+    }
+
+	/**
+	 * Finds all the **.js files inside a directory and loads it
+	 * @param {string} dir path containing directory of APIs
+	 */
+    loadAPIsFromDir(dir) {
+        let globbedDirs = utils.getGlobbedFiles(path.join(dir, '**/**.js'));
+
+        return globbedDirs.map((filePath) => this.loadAPIFromFile(filePath));
+    }
+
+	/**
+	 * Finds all the **.js files inside an array of directories and loads it
+	 * @param {array} dirs array of paths containing directory of APIs
+	 */
+    loadAPIsFromDirs(dirs) {
+        return dirs.map((dir) => this.loadAPIsFromDir(dir));
+    }
+};
