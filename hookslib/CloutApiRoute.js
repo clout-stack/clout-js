@@ -3,15 +3,12 @@
  * Copyright(c) 2018 Muhammad Dadu
  * MIT Licensed
  */
-/**
- * @module clout-js/hookslib/CloutApiRoute
- */
 
 /**
  * CloutApiRoute
  * @class
  */
-module.exports = class CloutApiRoute {
+class CloutApiRoute {
     /**
      * @constructor
      * @param {object} _opts
@@ -69,3 +66,5 @@ module.exports = class CloutApiRoute {
         });
     }
 };
+
+module.exports = CloutApiRoute;

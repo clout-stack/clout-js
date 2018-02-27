@@ -3,9 +3,6 @@
  * Copyright(c) 2018 Muhammad Dadu
  * MIT Licensed
  */
-/**
- * @module clout-js/hookslib/CloutApiRoutes
- */
 
 const { merge } = require('lodash');
 const CloutApiRoute = require('../hookslib/CloutApiRoute');
@@ -17,7 +14,7 @@ const path = require('path');
  * CloutApiRoutes
  * @class
  */
-module.exports = class CloutApiRoutes {
+class CloutApiRoutes {
 
     /**
      * @constructor
@@ -119,3 +116,5 @@ module.exports = class CloutApiRoutes {
         return dirs.map((dir) => this.loadAPIsFromDir(dir));
     }
 };
+
+module.exports = CloutApiRoutes;

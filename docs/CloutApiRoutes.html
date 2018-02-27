@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Clout - Documentation</title>
+    <title>CloutApiRoutes - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Clout</h1>
+    <h1 class="page-title">CloutApiRoutes</h1>
     
 
     
@@ -42,12 +42,10 @@
 <header>
     
         <h2>
-            <span class="ancestors"><a href="module-clout-js_lib_Clout.html">clout-js/lib/Clout</a>~</span>
-        
-        Clout
+        CloutApiRoutes
         </h2>
         
-            <div class="class-description">Clout application</div>
+            <div class="class-description">CloutApiRoutes</div>
         
     
 </header>
@@ -62,7 +60,7 @@
     <h2>Constructor</h2>
     
 
-    <h4 class="name" id="Clout"><span class="type-signature"></span>new Clout<span class="signature">(rootDirectory)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="CloutApiRoutes"><span class="type-signature"></span>new CloutApiRoutes<span class="signature">(app)</span><span class="type-signature"></span></h4>
 
     
 
@@ -101,7 +99,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_Clout.js.html">lib/Clout.js</a>, <a href="lib_Clout.js.html#line47">line 47</a>
+        <a href="hookslib_CloutApiRoutes.js.html">hookslib/CloutApiRoutes.js</a>, <a href="hookslib_CloutApiRoutes.js.html#line17">line 17</a>
     </li></ul></dd>
     
 
@@ -145,13 +143,13 @@
 
         <tr>
             
-                <td class="name"><code>rootDirectory</code></td>
+                <td class="name"><code>app</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><code>path</code></span>
+<span class="param-type"><code>object</code></span>
 
 
             
@@ -162,7 +160,7 @@
             
 
             <td class="description last">
-                application directory
+                clout instance
                 
             </td>
         </tr>
@@ -211,14 +209,14 @@
 
     
 
-    <h4 class="name" id="addApi"><span class="type-signature"></span>addApi<span class="signature">(path, fn)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="addRoute"><span class="type-signature"></span>addRoute<span class="signature">(CloutApiRouter)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Add API
+    Add CloutApiRouter to router
 </div>
 
 
@@ -254,7 +252,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_Clout.js.html">lib/Clout.js</a>, <a href="lib_Clout.js.html#line357">line 357</a>
+        <a href="hookslib_CloutApiRoutes.js.html">hookslib/CloutApiRoutes.js</a>, <a href="hookslib_CloutApiRoutes.js.html#line70">line 70</a>
     </li></ul></dd>
     
 
@@ -298,13 +296,13 @@
 
         <tr>
             
-                <td class="name"><code>path</code></td>
+                <td class="name"><code>CloutApiRouter</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><code>string</code></span>
+<span class="param-type"><code>object</code></span>
 
 
             
@@ -315,33 +313,7 @@
             
 
             <td class="description last">
-                api path
                 
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>fn</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>function</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                express function
                 
             </td>
         </tr>
@@ -372,14 +344,14 @@
 
     
 
-    <h4 class="name" id="addModule"><span class="type-signature"></span>addModule<span class="signature">(moduleName)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="attachRouterToApp"><span class="type-signature"></span>attachRouterToApp<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Load clout-js node module
+    Attaches router to clout-app
 </div>
 
 
@@ -415,7 +387,173 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_Clout.js.html">lib/Clout.js</a>, <a href="lib_Clout.js.html#line279">line 279</a>
+        <a href="hookslib_CloutApiRoutes.js.html">hookslib/CloutApiRoutes.js</a>, <a href="hookslib_CloutApiRoutes.js.html#line59">line 59</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="initializeAcceptTypeHandler"><span class="type-signature"></span>initializeAcceptTypeHandler<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Clout-JS handler for custom content requests
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="hookslib_CloutApiRoutes.js.html">hookslib/CloutApiRoutes.js</a>, <a href="hookslib_CloutApiRoutes.js.html#line42">line 42</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="loadAPIFromFile"><span class="type-signature"></span>loadAPIFromFile<span class="signature">(filePath)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Load APIs from a file
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="hookslib_CloutApiRoutes.js.html">hookslib/CloutApiRoutes.js</a>, <a href="hookslib_CloutApiRoutes.js.html#line84">line 84</a>
     </li></ul></dd>
     
 
@@ -459,7 +597,7 @@
 
         <tr>
             
-                <td class="name"><code>moduleName</code></td>
+                <td class="name"><code>filePath</code></td>
             
 
             <td class="type">
@@ -476,7 +614,7 @@
             
 
             <td class="description last">
-                clout node module name
+                
                 
             </td>
         </tr>
@@ -507,14 +645,14 @@
 
     
 
-    <h4 class="name" id="loadHooksFromDir"><span class="type-signature"></span>loadHooksFromDir<span class="signature">(dir)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+    <h4 class="name" id="loadAPIsFromDir"><span class="type-signature"></span>loadAPIsFromDir<span class="signature">(dir)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Loads hooks from directory
+    Finds all the **.js files inside a directory and loads it
 </div>
 
 
@@ -550,7 +688,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_Clout.js.html">lib/Clout.js</a>, <a href="lib_Clout.js.html#line215">line 215</a>
+        <a href="hookslib_CloutApiRoutes.js.html">hookslib/CloutApiRoutes.js</a>, <a href="hookslib_CloutApiRoutes.js.html#line105">line 105</a>
     </li></ul></dd>
     
 
@@ -600,7 +738,7 @@
             <td class="type">
             
                 
-<span class="param-type"><code>Path</code></span>
+<span class="param-type"><code>string</code></span>
 
 
             
@@ -611,7 +749,7 @@
             
 
             <td class="description last">
-                directory
+                path containing directory of APIs
                 
             </td>
         </tr>
@@ -633,31 +771,6 @@
 
 
 
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>Promise</code></span>
-
-
-    </dd>
-</dl>
-
-
-<div class="param-desc">
-    promise
-</div>
-
-    
-</div>
-
 
 
 </div>
@@ -667,14 +780,14 @@
 
     
 
-    <h4 class="name" id="registerHook"><span class="type-signature"></span>registerHook<span class="signature">(event, fn, priority, override)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="loadAPIsFromDirs"><span class="type-signature"></span>loadAPIsFromDirs<span class="signature">(dirs)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    hook into clout runtime
+    Finds all the **.js files inside an array of directories and loads it
 </div>
 
 
@@ -710,7 +823,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_Clout.js.html">lib/Clout.js</a>, <a href="lib_Clout.js.html#line169">line 169</a>
+        <a href="hookslib_CloutApiRoutes.js.html">hookslib/CloutApiRoutes.js</a>, <a href="hookslib_CloutApiRoutes.js.html#line115">line 115</a>
     </li></ul></dd>
     
 
@@ -754,13 +867,13 @@
 
         <tr>
             
-                <td class="name"><code>event</code></td>
+                <td class="name"><code>dirs</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><code>string</code></span>
+<span class="param-type"><code>array</code></span>
 
 
             
@@ -771,162 +884,7 @@
             
 
             <td class="description last">
-                event name
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>fn</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>function</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                function to execute
-                
-                    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>_name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>String</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                hook name
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>group</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>String</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                hook group
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>priority</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Number</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                function priority
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>override</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Boolean</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                override existing
+                array of paths containing directory of APIs
                 
             </td>
         </tr>
@@ -947,344 +905,6 @@
 
 
 
-
-
-
-<div class="section-examples">
-<h5>Example</h5>
-
-    <pre class="prettyprint"><code>// register a function to the hook
-clout.registerHook('start', function (next) {
-	next();
-});
-// invoking an error in clout runtime
-clout.registerHook('start', function (next) {
-	next(new Error('Error executing function'));
-});</code></pre>
-
-</div>
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="reload"><span class="type-signature"></span>reload<span class="signature">()</span><span class="type-signature"> &rarr; {Promise}</span></h4>
-
-    
-
-
-
-<div class="description">
-    Reload clout
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_Clout.js.html">lib/Clout.js</a>, <a href="lib_Clout.js.html#line426">line 426</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>Promise</code></span>
-
-
-    </dd>
-</dl>
-
-
-<div class="param-desc">
-    returns a promise
-</div>
-
-    
-</div>
-
-
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="start"><span class="type-signature"></span>start<span class="signature">()</span><span class="type-signature"> &rarr; {Promise}</span></h4>
-
-    
-
-
-
-<div class="description">
-    Start clout
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_Clout.js.html">lib/Clout.js</a>, <a href="lib_Clout.js.html#line318">line 318</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>Promise</code></span>
-
-
-    </dd>
-</dl>
-
-
-<div class="param-desc">
-    returns a promise
-</div>
-
-    
-</div>
-
-
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="stop"><span class="type-signature"></span>stop<span class="signature">()</span><span class="type-signature"> &rarr; {Promise}</span></h4>
-
-    
-
-
-
-<div class="description">
-    Stop clout
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_Clout.js.html">lib/Clout.js</a>, <a href="lib_Clout.js.html#line405">line 405</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>Promise</code></span>
-
-
-    </dd>
-</dl>
-
-
-<div class="param-desc">
-    returns a promise
-</div>
-
-    
-</div>
 
 
 
