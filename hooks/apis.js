@@ -16,6 +16,10 @@ const ACCEPT_TYPES = {
 	html: 'text/html'
 };
 
+const API_BASE_PATH = '/api';
+
+let apiRoutes;
+
 /**
  * Load APIs from a file
  * @private
@@ -25,6 +29,10 @@ const ACCEPT_TYPES = {
 function loadAPIFromFile(filePath, router) {
 	let groupName = path.basename(filePath).replace('.js', '');
 
+	if (!apiRoutes[groupName]) {
+		apiRoutes[groupName] = [];
+	}
+
 	debug('loading apis from %s', groupName);
 	try {
 		var apis = require(filePath);
@@ -33,12 +41,15 @@ function loadAPIFromFile(filePath, router) {
 	}
 	Object.keys(apis).forEach(function loadApi(apiName) {
 		debug('loading api %s:%s', groupName, apiName);
-		var api = apis[apiName];
+		let api = apis[apiName];
+		let apiMeta;
+
 		if (!api.path) {
 			return;
 		}
+
 		// allow .ext
-		api.path += '\.:acceptType?';
+		let apiPath = `\${api.path}.:acceptType?`;
 
 		var hooks = api.hooks || [],
 			methods = api.methods
@@ -48,7 +59,7 @@ function loadAPIFromFile(filePath, router) {
 		methods = methods.map((method) => method.toLowerCase());
 
 		// log endpoint request
-		methods.forEach((method) => router[method](api.path, function (req, res, next) {
+		methods.forEach((method) => router[method](apiPath, function (req, res, next) {
 			req.logger.info('Endpoint [%s] /api%s', req.method, req.path);
 			debug('Endpoint [%s] /api%s', req.method, req.path);
 			next();
@@ -60,7 +71,7 @@ function loadAPIFromFile(filePath, router) {
 				// implement smart hooks
 				return;
 			}
-			methods.forEach((method) => router[method](api.path, function (req) {
+			methods.forEach((method) => router[method](apiPath, function (req) {
 				hook.name && debug('hook:', hook.name);
 				hook.apply(this, arguments);
 			}));
@@ -68,8 +79,8 @@ function loadAPIFromFile(filePath, router) {
 
 		// load api
 		if (api.fn) {
-			methods.forEach((method) => router[method](api.path, function (req) {
-				debug('loaded endpoint [%s] /api%s', method, api.path);
+			methods.forEach((method) => router[method](apiPath, function (req) {
+				debug('loaded endpoint [%s] /api%s', method, apiPath);
 				// allow .ext
 				if (req.params.acceptType && ACCEPT_TYPES[req.params.acceptType]) {
 					var acceptType = ACCEPT_TYPES[req.params.acceptType];
@@ -79,6 +90,15 @@ function loadAPIFromFile(filePath, router) {
 				debug('loading api %s:%s', groupName, apiName);
 				api.fn.apply(this, arguments);
 			}));
+
+			apiMeta = {
+				path: `${API_BASE_PATH}${api.path}`,
+				methods: methods,
+				params: api.params || {},
+				description: api.description
+			};
+
+			apiRoutes[groupName].push(apiMeta);
 		}
 	});
 }
@@ -106,6 +126,8 @@ module.exports = {
 		fn: function (next) {
 			let router = express.Router();
 
+			apiRoutes = this.apiRoutes = {};
+
 			debug('loading apis');
 			// 1) load module hooks
 			this.modules.forEach((moduleInfo) => {
@@ -115,7 +137,8 @@ module.exports = {
 			loadAPIsFromDirectory(path.resolve(this.rootDirectory, 'apis'), router);
 
 			// 3) attach router
-			this.app.use('/api', router);
+			this.app.use(API_BASE_PATH, router);
+
 			debug('attached router');
 			next();
 		}
