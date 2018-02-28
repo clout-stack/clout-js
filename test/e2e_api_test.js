@@ -31,16 +31,37 @@ describe('e2e API Tests', function () {
         });
     });
 
-    it('check api response headers', (done) => {
-        request({ uri: `/api` })
-        .then((response) => {
-            should(response.headers['x-powered-by']).be.equal('Clout-JS');
-            should(response.headers['clout-env']).be.equal(process.env.NODE_ENV);
-            done();
-        });
-    });
-
     describe('/simple - example api', () => {
+        describe('check api response headers', () => {
+            let headers;
+
+            it('/api/simple', (done) => {
+                request({ uri: `/api/simple` })
+                    .then((response) => {
+                        should(response.headers['x-powered-by']).be.equal('Clout-JS');
+                        should(response.headers['clout-env']).be.equal(process.env.NODE_ENV);
+                        should(response.headers['content-type']).be.equal('application/json; charset=utf-8');
+                        done();
+                    });
+            });
+
+            it('*.json', (done) => {
+                request({ uri: `/api/simple.json` })
+                    .then((response) => {
+                        should(response.headers['content-type']).be.equal('application/json; charset=utf-8');
+                        done();
+                    });
+            });
+
+            it('*.html', (done) => {
+                request({ uri: `/api/simple.html` })
+                    .then((response) => {
+                        should(response.headers['content-type']).be.equal('text/html; charset=utf-8');
+                        done();
+                    });
+            });
+        });
+
         it('should return 0 items from /simple', (done) => {
             request({ uri: `/api/simple`, json: true })
                 .then((response) => {
