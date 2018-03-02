@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>hooks/models.js - Documentation</title>
+    <title>CloutApiRoute - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,89 +29,629 @@
 
 <div id="main">
     
-    <h1 class="page-title">hooks/models.js</h1>
+    <h1 class="page-title">CloutApiRoute</h1>
     
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/*!
- * clout-js
- * Copyright(c) 2015 - 2016 Muhammad Dadu
- * MIT Licensed
- */
-/**
- * Models hooks
- * @module clout-js/hooks/models
- */
-const
-	debug = require('debug')('clout:hook/models'),
-	utils = require('../lib/utils'),
-	Q = require('q'),
-	path = require('path');
+        <h2>
+        CloutApiRoute
+        </h2>
+        
+            <div class="class-description">CloutApiRoute</div>
+        
+    
+</header>
 
-module.exports = {
-	/**
-	 * initialize models
-	 * @property {event} event start
-	 * @property {priority} priority MODEL
-	 */
-	initialize: {
-		event: 'start',
-		priority: 'MODEL',
-		fn: function (next) {
-			debug('initialize models');
-			this.models = {};
-			// append to middleware
-			this.app.request.models = this.models;
-			next();
-		}
-	},
-	/**
-	 * load models from application paths
-	 * @property {event} event start
-	 * @property {priority} priority MODEL + 2
-	 */
-	loadModels: {
-		event: 'start',
-		priority: 18,
-		fn: function (next) {
-			var self = this;
+<article>
+    <div class="container-overview">
+    
+        
+<div class="section-method">
 
-			function loadModelsFromDir(dir) {
-				var dirs = utils.getGlobbedFiles(path.join(dir, '**/**.js'));
-				dirs.forEach(function (dir) {
-					var modelName = dir.split('models/')[1].replace('.js', '');
-					debug('loading model %s', modelName);
-					if (self.models.hasOwnProperty(modelName)) {
-						throw new Error('Cannot load model `' + modelName + '` as it already exists');
-					}
-					try {
-						self.models[modelName] = require(dir);
-					} catch (e) {
-						throw new Error('Error loading model `' + modelName + '`: ' + e);
-					}
-				});
-			}
+    
+    <h2>Constructor</h2>
+    
 
-			debug('loading models');
-			// 1) load module hooks
-			this.modules.forEach(function (module) {
-				loadModelsFromDir(path.join(module.path, 'models'));
-			});
-			// 2) load application hooks
-			loadModelsFromDir(path.join(self.rootDirectory, 'models'));
-			next();
-		}
-	}
-};
-</code></pre>
-        </article>
-    </section>
+    <h4 class="name" id="CloutApiRoute"><span class="type-signature"></span>new CloutApiRoute<span class="signature">(_opts)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="hookslib_CloutApiRoute.js.html">hookslib/CloutApiRoute.js</a>, <a href="hookslib_CloutApiRoute.js.html#line11">line 11</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>_opts</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>object</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                
+                
+                    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>path</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>hooks</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>array</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>method</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>methods</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>array</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>group</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>description</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>fn</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>function</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="attachRouter"><span class="type-signature"></span>attachRouter<span class="signature">(router)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    attach express router
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="hookslib_CloutApiRoute.js.html">hookslib/CloutApiRoute.js</a>, <a href="hookslib_CloutApiRoute.js.html#line43">line 43</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>router</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>object</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                express router
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

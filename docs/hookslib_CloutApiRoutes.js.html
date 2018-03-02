@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>hooks/models.js - Documentation</title>
+    <title>hookslib/CloutApiRoutes.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">hooks/models.js</h1>
+    <h1 class="page-title">hookslib/CloutApiRoutes.js</h1>
     
 
     
@@ -41,74 +41,124 @@
         <article>
             <pre class="prettyprint source linenums"><code>/*!
  * clout-js
- * Copyright(c) 2015 - 2016 Muhammad Dadu
+ * Copyright(c) 2018 Muhammad Dadu
  * MIT Licensed
  */
+
+const { merge } = require('lodash');
+const CloutApiRoute = require('../hookslib/CloutApiRoute');
+const express = require('express');
+const utils = require('../lib/utils');
+const path = require('path');
+
 /**
- * Models hooks
- * @module clout-js/hooks/models
+ * CloutApiRoutes
+ * @class
  */
-const
-	debug = require('debug')('clout:hook/models'),
-	utils = require('../lib/utils'),
-	Q = require('q'),
-	path = require('path');
+class CloutApiRoutes {
 
-module.exports = {
+    /**
+     * @constructor
+     * @param {object} app clout instance
+     */
+    constructor(app) {
+        this.clout = app;
+        this.config = {
+            basePath: '/api',
+            acceptTypes: {
+                json: 'application/json',
+                html: 'text/html'
+            }
+        };
+        this.routes = {};
+        this.router = express.Router();
+        this.initializeAcceptTypeHandler();
+
+        this.clout.logger.debug('Module CloutApiRoutes loaded');
+    }
+
+    /**
+     * Clout-JS handler for custom content requests
+     */
+    initializeAcceptTypeHandler() {
+        this.router.param('acceptType', (req, resp, next, type) => {
+            let acceptType = this.config.acceptTypes[type];
+
+            req.logger.info(`handling param '${acceptType}'`);
+
+            if (acceptType) {
+                req.headers['accept'] = `${acceptType},` + req.headers['accept'];
+            };
+
+            next();
+        });
+    }
+
+    /**
+     * Attaches router to clout-app
+     */
+    attachRouterToApp() {
+        let basePath = this.config.basePath;
+
+        this.clout.app.use(basePath, this.router);
+        this.clout.logger.debug(`router attached at ${basePath}`);
+    }
+
+    /**
+     * Add CloutApiRouter to router
+     * @param {object} CloutApiRouter
+     */
+    addRoute(cloutRoute) {
+        if (!this.routes[cloutRoute.group]) {
+            this.routes[cloutRoute.group] = [];
+        }
+
+        this.routes[cloutRoute.group].push(cloutRoute);
+
+        cloutRoute.attachRouter(this.router);
+    }
+
 	/**
-	 * initialize models
-	 * @property {event} event start
-	 * @property {priority} priority MODEL
+	 * Load APIs from a file
+	 * @param {string} filePath
 	 */
-	initialize: {
-		event: 'start',
-		priority: 'MODEL',
-		fn: function (next) {
-			debug('initialize models');
-			this.models = {};
-			// append to middleware
-			this.app.request.models = this.models;
-			next();
-		}
-	},
+    loadAPIFromFile(filePath) {
+        let groupName = path.basename(filePath).replace('.js', '');
+        let apis = require(filePath);
+
+        this.clout.logger.debug(`loading API from file ${filePath}`);
+
+        return Object.keys(apis).map((apiName) => {
+            let opts = merge({
+                method: 'all',
+                name: apiName,
+                group: groupName
+            }, apis[apiName]);
+
+            return this.addRoute(new CloutApiRoute(opts));
+        });
+    }
+
 	/**
-	 * load models from application paths
-	 * @property {event} event start
-	 * @property {priority} priority MODEL + 2
+	 * Finds all the **.js files inside a directory and loads it
+	 * @param {string} dir path containing directory of APIs
 	 */
-	loadModels: {
-		event: 'start',
-		priority: 18,
-		fn: function (next) {
-			var self = this;
+    loadAPIsFromDir(dir) {
+        let globbedDirs = utils.getGlobbedFiles(path.join(dir, '**/**.js'));
 
-			function loadModelsFromDir(dir) {
-				var dirs = utils.getGlobbedFiles(path.join(dir, '**/**.js'));
-				dirs.forEach(function (dir) {
-					var modelName = dir.split('models/')[1].replace('.js', '');
-					debug('loading model %s', modelName);
-					if (self.models.hasOwnProperty(modelName)) {
-						throw new Error('Cannot load model `' + modelName + '` as it already exists');
-					}
-					try {
-						self.models[modelName] = require(dir);
-					} catch (e) {
-						throw new Error('Error loading model `' + modelName + '`: ' + e);
-					}
-				});
-			}
+        return globbedDirs.map((filePath) => this.loadAPIFromFile(filePath));
+    }
 
-			debug('loading models');
-			// 1) load module hooks
-			this.modules.forEach(function (module) {
-				loadModelsFromDir(path.join(module.path, 'models'));
-			});
-			// 2) load application hooks
-			loadModelsFromDir(path.join(self.rootDirectory, 'models'));
-			next();
-		}
-	}
+	/**
+	 * Finds all the **.js files inside an array of directories and loads it
+	 * @param {array} dirs array of paths containing directory of APIs
+	 */
+    loadAPIsFromDirs(dirs) {
+        return dirs.map((dir) => this.loadAPIsFromDir(dir));
+    }
 };
+
+module.exports = CloutApiRoutes;
 </code></pre>
         </article>
     </section>
