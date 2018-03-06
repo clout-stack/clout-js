@@ -47,7 +47,7 @@ class CloutApiRoutes {
 
             if (acceptType) {
                 req.headers['accept'] = `${acceptType},` + req.headers['accept'];
-            };
+            }
 
             next();
         });
