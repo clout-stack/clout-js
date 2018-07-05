@@ -182,7 +182,7 @@ module.exports = {
 					context
 						.type('json')
 						.status(method.code)
-						.send(JSON.stringify(payload));
+						.send(JSON.stringify(payload.data));
 				}
 			}
 
@@ -192,7 +192,7 @@ module.exports = {
 					context
 						.status(method.code)
 						.render(method.render, {
-							data: payload
+							data: payload.data
 						});
 				}
 			}

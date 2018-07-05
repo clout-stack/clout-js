@@ -11,7 +11,7 @@ It all came down to going back to the basics and using express to build any proj
 $ npm install clout-js@beta --save
 ```
 
-## Module Development
+## Development
 These commands should be run in this directory.
 
 ### Run tests
@@ -26,7 +26,7 @@ $ npm run gendoc
 
 ### Run application with this instance
 ```bash
-$ APPLICATION_PATH=<clout-js-applcaiton> npm run start
+$ APPLICATION_PATH=<clout-js-applcation> npm run start
 ```
 
 ## Usage
@@ -38,13 +38,13 @@ clout.start();
 clout.on('started', () => {
 	['https', 'http'].forEach((key) => {
 		let server = clout.server[key];
+
 		if (server) {
 			let port = server.address().port;
 			console.info('%s server started on port %s', key, port);
 		}
 	});
 });
-
 ```
 
 ## Clout Application Loader default paths

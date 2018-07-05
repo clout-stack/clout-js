@@ -65,8 +65,8 @@ describe('e2e API Tests', function () {
         it('should return 0 items from /simple', (done) => {
             request({ uri: `/api/simple`, json: true })
                 .then((response) => {
-                    should(response.body.code).be.equal(200);
-                    should(response.body.data.length).be.equal(0);
+                    should(response.statusCode).be.equal(200);
+                    should(response.body.length).be.equal(0);
                     done();
                 });
         });
@@ -79,7 +79,7 @@ describe('e2e API Tests', function () {
                 json: true
             })
             .then((response) => {
-                should(response.body.data).be.deepEqual(merge({ id: 1 }, EXAMPLE_ITEM_1));
+                should(response.body).be.deepEqual(merge({ id: 1 }, EXAMPLE_ITEM_1));
                 done();
             });
         });
@@ -87,8 +87,8 @@ describe('e2e API Tests', function () {
         it('should return 1 item from /simple', (done) => {
             request({ uri: `/api/simple`, json: true })
                 .then((response) => {
-                    should(response.body.code).be.equal(200);
-                    should(response.body.data.length).be.equal(1);
+                    should(response.statusCode).be.equal(200);
+                    should(response.body.length).be.equal(1);
                     done();
                 });
         });
@@ -96,8 +96,8 @@ describe('e2e API Tests', function () {
         it('should return an item from /simple/1', (done) => {
             request({ uri: `/api/simple/1`, json: true })
                 .then((response) => {
-                    let data = response.body.data;
-                    should(response.body.code).be.equal(200);
+                    let data = response.body;
+                    should(response.statusCode).be.equal(200);
                     should(data.id).be.deepEqual(1);
                     done();
                 });
@@ -114,11 +114,10 @@ describe('e2e API Tests', function () {
 
         it('should delete an item from /simple/1', function (done) {
             request({ uri: `/api/simple/1`, method: 'delete', json: true })
-                .then((response) => response.body.data)
                 .then(() => request({ uri: `/api/simple`, json: true }))
                 .then((response) => {
-                    should(response.body.code).be.equal(200);
-                    should(response.body.data.length).be.equal(0);
+                    should(response.statusCode).be.equal(200);
+                    should(response.body.length).be.equal(0);
                     done();
                 });
         });
