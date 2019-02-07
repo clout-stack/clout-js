@@ -65,6 +65,8 @@ describe('e2e Product Tests', function () {
 
             should(response.statusCode).be.equal(200);
             should(data.id).be.deepEqual('1');
+
+            should(data).be.deepEqual({ make: 'BMW', model: 'E30', year: '1994', id: '1' });
         });
 
         it('should return html response from /product/1.html', async () => {

@@ -107,18 +107,18 @@ class CloutApiRoutes {
         let globbedDirs = utils.getGlobbedFiles(path.join(dir, '**/**.js'));
 
         return globbedDirs.sort((a, b) => {
-            const aHasPriority = PRIORITIZED_FILES.indexOf(a) !== -1;
-            const bHasPriority = PRIORITIZED_FILES.indexOf(b) !== -1;
+            const aPriority = PRIORITIZED_FILES.indexOf(a) !== -1;
+            const bPriority = PRIORITIZED_FILES.indexOf(b) !== -1;
+            const weight = {a: 0, b: 0};
 
-            if (aHasPriority && !bHasPriority) {
-                return 1;
+            if (aPriority !== -1) {
+                weight.a = aPriority + 1;
+            }
+            if (bPriority !== -1) {
+                weight.b = aPriority + 1;
             }
 
-            if (!aHasPriority && bHasPriority) {
-                return -1;
-            }
-
-            return 0;
+            return weight.a > weight.b ? 1 : weight.b > weight.a ? -1 : 0;
         }).map((filePath) => this.loadAPIFromFile(filePath));
     }
 

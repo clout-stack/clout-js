@@ -9,7 +9,11 @@ module.exports = function(grunt) {
         mochaTest: {
             test: {
                 src: ['test/*_test.js']
-            }
+			}
+			watch: {
+				src: ['test/*_test.js'],
+				watch: true,
+			}
         },
 	    jsdoc : {
 	        dist : {
@@ -27,6 +31,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-jsdoc');
 
 	grunt.registerTask('test', 'mochaTest');
+	grunt.registerTask('test:watch', 'mochaTest:watch');
 	grunt.registerTask('gendoc', ['mochaTest', 'jsdoc']);
 
 	grunt.registerTask('defualt', ['mochaTest', 'jsdoc']);

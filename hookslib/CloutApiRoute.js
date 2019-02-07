@@ -3,6 +3,8 @@
  * Copyright(c) 2018 Muhammad Dadu
  * MIT Licensed
  */
+const {safePromisifyCall} = require('../lib/utils');
+const types = require('./apiType');
 
 const DEFAULT_METHOD = 'all';
 const TYPES_DEFINITION = {
@@ -32,6 +34,7 @@ class CloutApiRoute {
         this._opts = _opts;
 
         this.type = this._opts.type || DEFAULT_TYPE;
+        this.isPublicFacing = this.type.includes('api');
 
         switch (this.type) {
             case TYPES_DEFINITION.PARAM:
@@ -55,35 +58,23 @@ class CloutApiRoute {
         this.fn = this._opts.fn;
     }
 
+    /**
+     * handles router method in a promise
+     * @param {*} fn RouterCallback
+     */
     handlePromisePostTriggers(fn) {
-        const type = this.type;
-        const key = this.result || this.param;
-
+        const {isPublicFacing} = this;
         return function (req, resp, next, ...args) {
-            let maybePromise = fn.apply(this, [req, resp, next, ...args]);
+            safePromisifyCall(fn, this, [req, resp, null, ...args])
+                .then((data) => {
+                    if (isPublicFacing) {
+                        return resp.ok(data);
+                    }
 
-            if (!maybePromise || !maybePromise.then) {
-                return;
-            }
-
-            switch (type) {
-                case TYPES_DEFINITION.PARAM:
-                        if (!req._params) { req._params = {}; }
-
-                        if (!req.param.get) {
-                            req.param.get = (key) => req._params[key];
-                        }
-
-                        maybePromise.then((paramData) => req._params[key] = paramData)
-                            .then(() => next());
-                    break;
-                default:
-                    maybePromise.then((data) => resp.ok(data));
-                    break;
-            }
-
-            return maybePromise.catch((err) => next(err));
-        };
+                    next(null, data)
+                })
+                .catch((err) => next(err));
+        }
     }
 
     /**
@@ -91,30 +82,32 @@ class CloutApiRoute {
      * @param {object} router express router
      */
     attachRouter(router) {
+        const apiPath = this.path && `${this.path}.:acceptType?`;
+        const type = this.type
+
         this.router = router;
 
-        if (this.type === TYPES_DEFINITION.PARAM) {
-            return this.router.param(this.param, this.handlePromisePostTriggers(this.fn));
-        }
-
-        return this.methods.forEach((method) => {
-            // it's an endpoint
-            if (this.path) {
-                let path = `${this.path}.:acceptType?`;
-
+        // it's an endpoint
+        if (type === TYPES_DEFINITION.API) {
+            return this.methods.forEach((method) => {
                 // attach logging
-                this.router[method](path, function (req, resp, next) {
+                this.router[method](apiPath, function (req, resp, next) {
                     req.logger.info('Endpoint [%s] /api%s', req.method, req.path);
                     next();
                 });
 
                 // attach hooks
-                this.hooks.map((hook) => this.router[method](path, this.handlePromisePostTriggers(hook)));
+                this.hooks.map((hook) => this.router[method](apiPath, this.handlePromisePostTriggers(hook)));
 
-                // execute fn
-                this.router[method](path, this.handlePromisePostTriggers(this.fn));
-            }
-        });
+                this.router[method](apiPath, this.handlePromisePostTriggers(this.fn));
+            });
+        }
+
+        // it's a param definition
+        if (type === TYPES_DEFINITION.PARAM) {
+            const cloutApiParam = types.param.fn.apply(this, [this.fn]);
+            this.router.param(this.param, cloutApiParam);
+        }
     }
 };
 
