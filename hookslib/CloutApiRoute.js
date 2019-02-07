@@ -3,7 +3,7 @@
  * Copyright(c) 2018 Muhammad Dadu
  * MIT Licensed
  */
-const {safePromisifyCall} = require('../lib/utils');
+const {safePromisifyCallFn} = require('../lib/utils');
 const types = require('./apiType');
 
 const DEFAULT_METHOD = 'all';
@@ -65,7 +65,7 @@ class CloutApiRoute {
     handlePromisePostTriggers(fn) {
         const {isPublicFacing} = this;
         return function (req, resp, next, ...args) {
-            safePromisifyCall(fn, this, [req, resp, null, ...args])
+            safePromisifyCallFn(fn, this, [req, resp, null, ...args])
                 .then((data) => {
                     if (isPublicFacing) {
                         return resp.ok(data);
@@ -83,30 +83,22 @@ class CloutApiRoute {
      */
     attachRouter(router) {
         const apiPath = this.path && `${this.path}.:acceptType?`;
-        const type = this.type
+        const type = 
 
         this.router = router;
 
-        // it's an endpoint
-        if (type === TYPES_DEFINITION.API) {
-            return this.methods.forEach((method) => {
-                // attach logging
-                this.router[method](apiPath, function (req, resp, next) {
-                    req.logger.info('Endpoint [%s] /api%s', req.method, req.path);
-                    next();
-                });
+        switch (this.type) {
+            case TYPES_DEFINITION.PARAM:
+                const cloutApiParam = types.param.fn.apply(this, [this.fn]);
+                break;
 
-                // attach hooks
-                this.hooks.map((hook) => this.router[method](apiPath, this.handlePromisePostTriggers(hook)));
+            case TYPES_DEFINITION.API:
+                const cloutApi = types.api.fn.apply(this, [this.fn]);
 
-                this.router[method](apiPath, this.handlePromisePostTriggers(this.fn));
-            });
-        }
+                break;
 
-        // it's a param definition
-        if (type === TYPES_DEFINITION.PARAM) {
-            const cloutApiParam = types.param.fn.apply(this, [this.fn]);
-            this.router.param(this.param, cloutApiParam);
+            default:
+                console.error(`unrecognised type ${this.type}`);
         }
     }
 };
