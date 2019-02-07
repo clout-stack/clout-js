@@ -12,7 +12,7 @@ module.exports = {
             let simpleModel = req.models.simple;
 
             simpleModel.list()
-                .then((simpleItems) => resp.ok(simpleItems))
+                .then((items) => resp.ok(items))
                 .catch((err) => resp.notFound(err));
         }
     },
@@ -27,8 +27,11 @@ module.exports = {
             let params = req.params;
 
             simpleModel.getById(params.id)
-                .then((simpleItems) => resp.ok(simpleItems))
-                .catch((err) => resp.error(err));
+                .then((item) => resp.ok(item))
+                .catch((err) => {
+                    req.logger.error(err);
+                    resp.error(err);
+                });
         }
     },
     put: {
@@ -47,8 +50,11 @@ module.exports = {
             let params = req.body;
 
             simpleModel.create(params)
-                .then(() => resp.ok(req.body))
-                .catch((err) => resp.error(err));
+                .then((item) => resp.ok(item))
+                .catch((err) => {
+                    req.logger.error(err);
+                    resp.error(err);
+                });
         }
     },
     delete: {
@@ -63,7 +69,10 @@ module.exports = {
 
             simpleModel.deleteById({ id: params.id })
                 .then(() => resp.ok(req.body))
-                .catch((err) => resp.error(err));
+                .catch((err) => {
+                    req.logger.error(err);
+                    resp.error(err);
+                });
         }
     }
 };

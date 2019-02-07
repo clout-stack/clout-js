@@ -10,6 +10,8 @@ const express = require('express');
 const utils = require('../lib/utils');
 const path = require('path');
 
+const PRIORITIZED_FILES = ['index.js', 'clout.hook.js'];
+
 /**
  * CloutApiRoutes
  * @class
@@ -89,7 +91,6 @@ class CloutApiRoutes {
 
         return Object.keys(apis).map((apiName) => {
             let opts = merge({
-                method: 'all',
                 name: apiName,
                 group: groupName
             }, apis[apiName]);
@@ -105,7 +106,20 @@ class CloutApiRoutes {
     loadAPIsFromDir(dir) {
         let globbedDirs = utils.getGlobbedFiles(path.join(dir, '**/**.js'));
 
-        return globbedDirs.map((filePath) => this.loadAPIFromFile(filePath));
+        return globbedDirs.sort((a, b) => {
+            const aHasPriority = PRIORITIZED_FILES.indexOf(a) !== -1;
+            const bHasPriority = PRIORITIZED_FILES.indexOf(b) !== -1;
+
+            if (aHasPriority && !bHasPriority) {
+                return 1;
+            }
+
+            if (!aHasPriority && bHasPriority) {
+                return -1;
+            }
+
+            return 0;
+        }).map((filePath) => this.loadAPIFromFile(filePath));
     }
 
 	/**
