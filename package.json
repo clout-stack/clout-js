@@ -28,6 +28,11 @@
     "url": "https://github.com/clout-stack/clout-js/issues",
     "email": "muhammad@dadu.co"
   },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm audit; npm run test"
+    }
+  },
   "author": "Muhammad Dadu",
   "license": "MIT",
   "dependencies": {
@@ -55,6 +60,7 @@
     "grunt": "^1.0.3",
     "grunt-jsdoc": "^2.2.1",
     "grunt-mocha-test": "^0.13.3",
+    "husky": "^1.3.1",
     "jsdoc": "^3.5.5",
     "minami": "^1.2.3",
     "mocha": "^5.0.0",
