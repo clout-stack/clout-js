@@ -31,7 +31,15 @@ module.exports = {
     },
 
     deleteById(id) {
-        datastore[0].deleted = true;
-        return Promise.resolve();
+        let store = datastore.filter((item) => !item.deleted);
+        let itemIndex = store.findIndex((item) => item.id == id);
+
+        if (itemIndex === -1) {
+            return Promise.reject('not found');
+        }
+
+        store[itemIndex].deleted = true;
+
+        return Promise.resolve(store[itemIndex]);
     }
 };

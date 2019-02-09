@@ -67,7 +67,7 @@ module.exports = {
             let simpleModel = req.models.simple;
             let params = req.params;
 
-            simpleModel.deleteById({ id: params.id })
+            simpleModel.deleteById(params.id)
                 .then(() => resp.ok(req.body))
                 .catch((err) => {
                     req.logger.error(err);

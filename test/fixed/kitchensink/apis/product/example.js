@@ -39,7 +39,7 @@ module.exports = {
             API Example to demonstrate advanced routing
         `,
         fn: (req, resp) => {
-            resp.ok(req.param.get('product'));
+            resp.ok(req.param('product'));
         }
     },
     delete: {
@@ -49,7 +49,7 @@ module.exports = {
             API Example to demonstrate advanced routing
         `,
         fn: (req, resp) => {
-            req.param.get('product').delete()
+            req.param('product').delete()
                 .then(() => resp.ok({}));
         }
     }

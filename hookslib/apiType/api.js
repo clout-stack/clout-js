@@ -2,7 +2,8 @@ const {safePromisifyCallFn} = require('../../lib/utils');
 const CloutAPIRoute = require('../CloutApiRoute');
 
 module.exports = {
-    fn(fn) {
+    name: 'api',
+    fn(apiRoute) {
         const apiPath = this.path && `${this.path}.:acceptType?`;
 
         this.methods.forEach((method) => {
@@ -13,7 +14,7 @@ module.exports = {
             });
 
             // attach hooks
-            this.hooks.map((hook) => this.router[method](apiPath, this.handlePromisePostTriggers(hook)));
+            this.hooks.map((hookFn) => this.router[method](apiPath, this.handlePromisePostTriggers(hookFn)));
 
             this.router[method](apiPath, this.handlePromisePostTriggers(this.fn));
         });

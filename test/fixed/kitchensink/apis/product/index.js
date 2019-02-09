@@ -13,7 +13,7 @@ module.exports = {
             return req.models.product.getById(productId)
                 .catch((err) => {
                     req.logger.error(err);
-                    next(err);
+                    throw err;
                 });
         }
     }

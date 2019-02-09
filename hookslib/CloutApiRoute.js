@@ -33,7 +33,7 @@ class CloutApiRoute {
     constructor(_opts) {
         this._opts = _opts;
 
-        this.type = this._opts.type || DEFAULT_TYPE;
+        this.type = (this._opts.type || DEFAULT_TYPE).toLowerCase();
         this.isPublicFacing = this.type.includes('api');
 
         switch (this.type) {
@@ -82,23 +82,14 @@ class CloutApiRoute {
      * @param {object} router express router
      */
     attachRouter(router) {
-        const apiPath = this.path && `${this.path}.:acceptType?`;
-        const type = 
-
         this.router = router;
 
-        switch (this.type) {
-            case TYPES_DEFINITION.PARAM:
-                const cloutApiParam = types.param.fn.apply(this, [this.fn]);
-                break;
+        const matchedApiType = types[this.type];
 
-            case TYPES_DEFINITION.API:
-                const cloutApi = types.api.fn.apply(this, [this.fn]);
-
-                break;
-
-            default:
-                console.error(`unrecognised type ${this.type}`);
+        if (matchedApiType) {
+            const cloutApi = matchedApiType.fn.apply(this, [this.fn]);
+        } else {
+            console.error(`unrecognised type ${this.type}`);
         }
     }
 };
