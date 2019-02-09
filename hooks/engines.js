@@ -23,7 +23,7 @@ module.exports = {
     fn(next) {
       const self = this;
       debug('initialize engines');
-      !this.app.engines && (this.app.engines = {});
+      this.app.engines = this.app.engines || {};
 
       Object.defineProperty(this.app.engines, 'add', {
         value: function add(ext, engine) {
@@ -89,40 +89,37 @@ module.exports = {
     priority: 'MIDDLEWARE',
     fn(next) {
       this.app._render = this.app.render;
-      this.app.render = function (view, opts, cb) {
-        let ext = path.extname(view),
-          engines = this.engines,
-          dirs = this.get('views'),
-          queue = [],
-          found = false;
+      this.app.render = function cloutRender(view, opts, cb) {
+        const ext = path.extname(view);
+        const {engines} = this;
+        const dirs = this.get('views');
+        const queue = [];
+
         // if no extension, try each
         if (!ext || !engines[ext]) {
-          Object.keys(engines).forEach((ext) => {
-            queue.push(`${view}.${ext}`);
+          Object.keys(engines).forEach((engineExt) => {
+            queue.push(`${view}.${engineExt}`);
             dirs.forEach((dir) => {
-              queue.push(path.join(dir, `${view}.${ext}`));
+              queue.push(path.join(dir, `${view}.${engineExt}`));
             });
           });
         }
+
         // queue directly
         queue.push(view);
         dirs.forEach((dir) => {
           queue.push(path.join(dir, view));
         });
-        // run search
-        do {
-          const dir = queue.shift();
-          if (fs.existsSync(dir)) {
-            found = true;
-            view = dir;
-          }
-        } while (!found && queue.length > 0);
+
+        const viewFilePath = queue.find(dir => fs.existsSync(dir));
+
         // not found
-        if (!found) {
-          return cb(new Error(`Unable to find layout "${view}"`));
+        if (!viewFilePath) {
+          return cb(new Error(`Unable to find layout "${viewFilePath}"`));
         }
+
         // do original render
-        this._render.call(this, view, opts, cb);
+        return this._render.call(this, viewFilePath, opts, cb);
       };
       next();
     },

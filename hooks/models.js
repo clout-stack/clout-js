@@ -7,11 +7,9 @@
  * Models hooks
  * @module clout-js/hooks/models
  */
-const
-  debug = require('debug')('clout:hook/models'),
-  utils = require('../lib/utils'),
-  Q = require('q'),
-  path = require('path');
+const debug = require('debug')('clout:hook/models');
+const path = require('path');
+const utils = require('../lib/utils');
 
 module.exports = {
   /**
@@ -43,14 +41,15 @@ module.exports = {
 
       function loadModelsFromDir(dir) {
         const dirs = utils.getGlobbedFiles(path.join(dir, '**/**.js'));
-        dirs.forEach((dir) => {
-          const modelName = dir.split('models/')[1].replace('.js', '');
+        dirs.forEach((filePath) => {
+          const modelName = filePath.split('models/')[1].replace('.js', '');
           debug('loading model %s', modelName);
-          if (self.models.hasOwnProperty(modelName)) {
+          if (self.models[modelName]) {
             throw new Error(`Cannot load model \`${modelName}\` as it already exists`);
           }
+
           try {
-            self.models[modelName] = require(dir);
+            self.models[modelName] = require(filePath);
           } catch (e) {
             throw new Error(`Error loading model \`${modelName}\`: ${e}`);
           }

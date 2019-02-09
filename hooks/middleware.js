@@ -32,11 +32,11 @@ module.exports = {
       // TODO:-
       //  - move to Clout.js for initialization
       this.app = express();
-      this.app.use((req, resp, next) => {
+      this.app.use((req, resp, done) => {
         resp.setHeader('x-powered-by', 'Clout-JS');
         resp.setHeader('clout-version', `${this.package.version}`);
         resp.setHeader('clout-env', this.config.env);
-        next();
+        done();
       });
 
       // request parsing
@@ -175,7 +175,7 @@ module.exports = {
     event: 'start',
     priority: 'MIDDLEWARE',
     fn(next) {
-      const httpResponseMap = this.config.httpResponseMap;
+      const {httpResponseMap} = this.config;
 
       function jsonFormat(method, context, payload) {
         return () => {
@@ -186,9 +186,12 @@ module.exports = {
         };
       }
 
-      function htmlFormat(method, context, payload) {
+      function htmlFormat(_method, context, payload) {
         return () => {
-          !method.render && (method.render = DEFAULT_HTML_RENDER);
+          const method = _method.render
+            ? _method
+            : {..._method, ...{render: DEFAULT_HTML_RENDER}};
+
           context
             .status(method.code)
             .render(method.render, {
@@ -200,14 +203,14 @@ module.exports = {
       // TODO:-
       // - refactor to add support for more file types (CSV, XML)
       // - success: false should point to an error html response
-      for (const methodName in httpResponseMap) {
+      Object.keys(httpResponseMap).forEach((methodName) => {
         const method = httpResponseMap[methodName];
 
         if (typeof express.response[methodName] !== 'undefined') {
           debug('overiding express response method `%s`', methodName);
         }
 
-        express.response[methodName] = function (data) {
+        express.response[methodName] = function cloutResponse(data) {
           const deffered = Q.defer();
           const payload = {
             data,
@@ -230,7 +233,8 @@ module.exports = {
           deffered.resolve();
           return deffered.promise;
         };
-      }
+      });
+
       next();
     },
   },
@@ -241,10 +245,10 @@ module.exports = {
   errorHandler: {
     event: 'start',
     fn(next) {
-      this.app.use((err, req, resp, next) => {
-        if (!err) { return next(); }
+      this.app.use((err, req, resp, done) => {
+        if (!err) { return done(); }
         req.logger.error(err.stack);
-        resp.error(err);
+        return resp.error(err);
       });
       next();
     },

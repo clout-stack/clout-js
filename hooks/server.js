@@ -7,9 +7,8 @@
  * Server hooks
  * @module clout-js/hooks/server
  */
-const
-  debug = require('debug')('clout:hook/server'),
-  https = require('https');
+const debug = require('debug')('clout:hook/server');
+const https = require('https');
 
 module.exports = {
   /**
@@ -21,8 +20,9 @@ module.exports = {
     event: 'start',
     priority: 25,
     fn(next) {
-      let self = this,
-        port = process.env.PORT || this.config.http && this.config.http.port || 8080;
+      const self = this;
+      const port = process.env.PORT || (this.config.http && this.config.http.port) || 8080;
+
       this.server.http = this.app.listen(port, () => {
         if (self.server.http.address()) {
           debug('http server started on port %s', self.server.http.address().port);
@@ -40,10 +40,11 @@ module.exports = {
     event: 'stop',
     priority: 25,
     fn(next) {
-      const http = this.server.http;
+      const {http} = this.server;
 
       if (http) {
-        const port = http.address().port;
+        const {port} = http.address();
+
         http.close();
         debug('http server stopped on port %s', port);
       }
@@ -62,12 +63,12 @@ module.exports = {
     fn(next) {
       if (!this.config.https) { return next(); }
       debug('Securely using https protocol');
-      let port = process.env.SSLPORT || this.config.https.port || 8443,
-        conf = this.config.https;
+      const port = process.env.SSLPORT || this.config.https.port || 8443;
+      const conf = this.config.https;
 
       if (!conf) { return next(); }
 
-      this.server.https = https.createServer(conf, this.app).listen();
+      this.server.https = https.createServer(conf, this.app).listen(port);
       debug('https server started on port %s', this.server.https.address().port);
       next();
     },
@@ -81,11 +82,10 @@ module.exports = {
     event: 'stop',
     priority: 25,
     fn(next) {
-      const https = this.server.https;
+      if (this.server.https) {
+        const {port} = this.server.https.address();
 
-      if (https) {
-        const port = https.address().port;
-        https.close();
+        this.server.https.close();
         debug('https server stopped on port %s', port);
       }
 
