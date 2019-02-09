@@ -17,6 +17,7 @@ These commands should be run in this directory.
 ### Run tests
 ```bash
 $ npm run test
+$ npm run test:watch
 ```
 
 ### Create documentation

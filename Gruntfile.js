@@ -6,11 +6,6 @@
 
 module.exports = function(grunt) {
     grunt.initConfig({
-        mochaTest: {
-            test: {
-                src: ['test/*_test.js']
-            }
-        },
 	    jsdoc : {
 	        dist : {
 				src: ['bin/**/*.js', 'hooks/**/*.js', 'hookslib/**/*.js', 'lib/**/*.js', 'test/lib.js', 'index.js', 'README.md'],
@@ -23,11 +18,7 @@ module.exports = function(grunt) {
 	    }
     });
 
-    grunt.loadNpmTasks('grunt-mocha-test');
     grunt.loadNpmTasks('grunt-jsdoc');
-
-	grunt.registerTask('test', 'mochaTest');
-	grunt.registerTask('gendoc', ['mochaTest', 'jsdoc']);
-
-	grunt.registerTask('defualt', ['mochaTest', 'jsdoc']);
+	grunt.registerTask('gendoc', ['jsdoc']);
+	grunt.registerTask('defualt', ['jsdoc']);
 };

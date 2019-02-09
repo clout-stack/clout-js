@@ -2,6 +2,7 @@
  * Simple Clout Model using memory store
  */
 let datastore = [];
+let index = 0;
 
 module.exports = {
     list() {
@@ -11,24 +12,34 @@ module.exports = {
 
     getById(id) {
         let store = datastore.filter((item) => !item.deleted);
-        if (!store[id - 1]) {
+        let item = store.find((item) => item.id == id);
+
+        if (!item) {
             return Promise.reject('not found');
         }
 
-        return Promise.resolve(store[id - 1]);
+        return Promise.resolve(item);
     },
 
-    create(item) {
+    create(_item) {
+        index = index + 1;
+
+        let item = Object.assign({}, _item, {id: index});
         datastore.push(item);
 
-        let dataItem = datastore[datastore.length - 1];
-        dataItem.id = datastore.length;
-
-        return Promise.resolve(dataItem);
+        return Promise.resolve(item);
     },
 
     deleteById(id) {
-        datastore[0].deleted = true;
-        return Promise.resolve();
+        let store = datastore.filter((item) => !item.deleted);
+        let itemIndex = store.findIndex((item) => item.id == id);
+
+        if (itemIndex === -1) {
+            return Promise.reject('not found');
+        }
+
+        store[itemIndex].deleted = true;
+
+        return Promise.resolve(store[itemIndex]);
     }
 };
