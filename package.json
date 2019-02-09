@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node .",
     "grunt": "grunt",
-    "test": "grunt test",
+    "test": "mocha test/*_test.js",
+    "test:watch": "mocha test/*_test.js --watch",
     "gendoc": "grunt gendoc"
   },
   "keywords": [
