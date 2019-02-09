@@ -21,8 +21,8 @@ clout.package = package;
 
 (function initialize() {
 	/**
-	 * Define your program settings
-	 */
+   * Define your program settings
+   */
 	program
 		.name(package.name)
 		// .theme('clean')
@@ -30,8 +30,8 @@ clout.package = package;
 		.version(package.version);
 
 	/**
-	 * Load Help Commmands
-	 */
+   * Load Help Commmands
+   */
 	program
 		.command('help')
 		.desc('command information')
@@ -52,7 +52,7 @@ clout.package = package;
 	(require('../lib/commands'))(clout); // Load Commands
 
 	/**
-	 * Execute program
-	 */
+   * Execute program
+   */
 	program.parse();
 })();

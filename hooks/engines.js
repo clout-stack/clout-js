@@ -7,17 +7,16 @@
  * Rendering engines hooks
  * @module clout-js/hooks/engines
  */
-const
-  debug = require('debug')('clout:hook/engines'),
-  fs = require('fs-extra'),
-  path = require('path');
+const debug = require('debug')('clout:hook/engines');
+const fs = require('fs-extra');
+const path = require('path');
 
 module.exports = {
   /**
-	 * initialize engine mechanist
-	 * @property {event} event start
-	 * @property {priority} priority 2
-	 */
+   * initialize engine mechanist
+   * @property {event} event start
+   * @property {priority} priority 2
+   */
   initialize: {
     event: 'start',
     priority: 2,
@@ -38,10 +37,10 @@ module.exports = {
     },
   },
   /**
-	 * attach EJS engine
-	 * @property {event} event start
-	 * @property {priority} priority MIDDLEWARE
-	 */
+   * attach EJS engine
+   * @property {event} event start
+   * @property {priority} priority MIDDLEWARE
+   */
   html: {
     event: 'start',
     priority: 'MIDDLEWARE',
@@ -52,10 +51,10 @@ module.exports = {
     },
   },
   /**
-	 * attach EJS engine
-	 * @property {event} event start
-	 * @property {priority} priority MIDDLEWARE
-	 */
+   * attach EJS engine
+   * @property {event} event start
+   * @property {priority} priority MIDDLEWARE
+   */
   ejs: {
     event: 'start',
     priority: 'MIDDLEWARE',
@@ -66,10 +65,10 @@ module.exports = {
     },
   },
   /**
-	 * attach HBS engine
-	 * @property {event} event start
-	 * @property {priority} priority MIDDLEWARE
-	 */
+   * attach HBS engine
+   * @property {event} event start
+   * @property {priority} priority MIDDLEWARE
+   */
   hbs: {
     event: 'start',
     priority: 'MIDDLEWARE',
@@ -81,10 +80,10 @@ module.exports = {
   },
 
   /**
-	 * attach rendering mechanism
-	 * @property {event} event start
-	 * @property {priority} priority MIDDLEWARE
-	 */
+   * attach rendering mechanism
+   * @property {event} event start
+   * @property {priority} priority MIDDLEWARE
+   */
   render: {
     event: 'start',
     priority: 'MIDDLEWARE',

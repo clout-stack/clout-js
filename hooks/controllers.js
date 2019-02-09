@@ -46,8 +46,11 @@ module.exports = {
 
         // load hook first
         hooks.forEach((hook) => {
-          router[method](controller.path, function (...args) {
-            hook.name && debug('hook:', hook.name);
+          router[method](controller.path, function cloutHook(...args) {
+            if (hook.name) {
+              debug('hook:', hook.name);
+            }
+
             hook.apply(this, args);
           });
         });
@@ -55,7 +58,7 @@ module.exports = {
         // load controller
         if (controller.fn) {
           debug('loaded endpoint [%s] %s', method, controller.path);
-          router[method](controller.path, function (...args) {
+          router[method](controller.path, function cloutController(...args) {
             debug('loading controller %s:%s', name);
             controller.fn.apply(this, args);
           });

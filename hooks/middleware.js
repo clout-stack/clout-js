@@ -21,10 +21,10 @@ const DEFAULT_HTML_RENDER = 'htmljson';
 
 module.exports = {
   /**
-	 * Initialize express application
-	 * @property {event} event start
-	 * @property {priority} priority 1
-	 */
+   * Initialize express application
+   * @property {event} event start
+   * @property {priority} priority 1
+   */
   initialize: {
     event: 'start',
     priority: 1,
@@ -55,10 +55,10 @@ module.exports = {
     },
   },
   /**
-	 * attach compression mechanism
-	 * @property {event} event start
-	 * @property {priority} priority MIDDLEWARE
-	 */
+   * attach compression mechanism
+   * @property {event} event start
+   * @property {priority} priority MIDDLEWARE
+   */
   compress: {
     event: 'start',
     priority: 'MIDDLEWARE',
@@ -69,10 +69,10 @@ module.exports = {
     },
   },
   /**
-	 * attach session mechanism
-	 * @property {event} event start
-	 * @property {priority} priority MIDDLEWARE
-	 */
+   * attach session mechanism
+   * @property {event} event start
+   * @property {priority} priority MIDDLEWARE
+   */
   session: {
     event: 'start',
     priority: 'MIDDLEWARE',
@@ -99,10 +99,10 @@ module.exports = {
     },
   },
   /**
-	 * attach public folders
-	 * @property {event} event start
-	 * @property {priority} priority MIDDLEWARE
-	 */
+   * attach public folders
+   * @property {event} event start
+   * @property {priority} priority MIDDLEWARE
+   */
   publicFolders: {
     event: 'start',
     priority: 'MIDDLEWARE',
@@ -126,10 +126,10 @@ module.exports = {
     },
   },
   /**
-	 * attach views folders
-	 * @property {event} event start
-	 * @property {priority} priority MIDDLEWARE
-	 */
+   * attach views folders
+   * @property {event} event start
+   * @property {priority} priority MIDDLEWARE
+   */
   views: {
     event: 'start',
     priority: 'MIDDLEWARE',
@@ -167,10 +167,10 @@ module.exports = {
     },
   },
   /**
-	 * attach clout response mechanism
-	 * @property {event} event start
-	 * @property {priority} priority MIDDLEWARE
-	 */
+   * attach clout response mechanism
+   * @property {event} event start
+   * @property {priority} priority MIDDLEWARE
+   */
   response: {
     event: 'start',
     priority: 'MIDDLEWARE',
@@ -235,9 +235,9 @@ module.exports = {
     },
   },
   /**
-	 * attach error handling
-	 * @property {event} event start
-	 */
+   * attach error handling
+   * @property {event} event start
+   */
   errorHandler: {
     event: 'start',
     fn(next) {

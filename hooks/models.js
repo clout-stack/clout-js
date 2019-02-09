@@ -15,10 +15,10 @@ const
 
 module.exports = {
   /**
-	 * initialize models
-	 * @property {event} event start
-	 * @property {priority} priority MODEL
-	 */
+   * initialize models
+   * @property {event} event start
+   * @property {priority} priority MODEL
+   */
   initialize: {
     event: 'start',
     priority: 'MODEL',
@@ -31,10 +31,10 @@ module.exports = {
     },
   },
   /**
-	 * load models from application paths
-	 * @property {event} event start
-	 * @property {priority} priority MODEL + 2
-	 */
+   * load models from application paths
+   * @property {event} event start
+   * @property {priority} priority MODEL + 2
+   */
   loadModels: {
     event: 'start',
     priority: 18,

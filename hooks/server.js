@@ -13,10 +13,10 @@ const
 
 module.exports = {
   /**
-	 * http instance
-	 * @property {event} event start
-	 * @property {priority} priority 25
-	 */
+   * http instance
+   * @property {event} event start
+   * @property {priority} priority 25
+   */
   http: {
     event: 'start',
     priority: 25,
@@ -32,10 +32,10 @@ module.exports = {
     },
   },
   /**
-	 * stop http instance
-	 * @property {event} event stop
-	 * @property {priority} priority 25
-	 */
+   * stop http instance
+   * @property {event} event stop
+   * @property {priority} priority 25
+   */
   httpStop: {
     event: 'stop',
     priority: 25,
@@ -52,10 +52,10 @@ module.exports = {
     },
   },
   /**
-	 * https instance
-	 * @property {event} event start
-	 * @property {priority} priority 25
-	 */
+   * https instance
+   * @property {event} event start
+   * @property {priority} priority 25
+   */
   https: {
     event: 'start',
     priority: 25,
@@ -73,10 +73,10 @@ module.exports = {
     },
   },
   /**
-	 * stop https instance
-	 * @property {event} event stop
-	 * @property {priority} priority 25
-	 */
+   * stop https instance
+   * @property {event} event stop
+   * @property {priority} priority 25
+   */
   httpsStop: {
     event: 'stop',
     priority: 25,

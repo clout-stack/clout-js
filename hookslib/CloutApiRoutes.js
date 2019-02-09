@@ -79,9 +79,9 @@ class CloutApiRoutes {
   }
 
   /**
-	 * Load APIs from a file
-	 * @param {string} filePath
-	 */
+   * Load APIs from a file
+   * @param {string} filePath
+   */
   loadAPIFromFile(filePath) {
     const groupName = path.basename(filePath).replace('.js', '');
     const apis = require(filePath);
@@ -99,9 +99,9 @@ class CloutApiRoutes {
   }
 
   /**
-	 * Finds all the **.js files inside a directory and loads it
-	 * @param {string} dir path containing directory of APIs
-	 */
+   * Finds all the **.js files inside a directory and loads it
+   * @param {string} dir path containing directory of APIs
+   */
   loadAPIsFromDir(dir) {
     const globbedDirs = utils.getGlobbedFiles(path.join(dir, '**/**.js'));
 
@@ -122,9 +122,9 @@ class CloutApiRoutes {
   }
 
   /**
-	 * Finds all the **.js files inside an array of directories and loads it
-	 * @param {array} dirs array of paths containing directory of APIs
-	 */
+   * Finds all the **.js files inside an array of directories and loads it
+   * @param {array} dirs array of paths containing directory of APIs
+   */
   loadAPIsFromDirs(dirs) {
     return dirs.map(dir => this.loadAPIsFromDir(dir));
   }
