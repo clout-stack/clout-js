@@ -87,7 +87,7 @@ class CloutApiRoute {
     const matchedApiType = types[this.type];
 
     if (matchedApiType) {
-      const cloutApi = matchedApiType.fn.apply(this, [this.fn]);
+      matchedApiType.fn.apply(this, [this.fn]);
     } else {
       console.error(`unrecognised type ${this.type}`);
     }

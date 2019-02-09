@@ -1,12 +1,12 @@
-const { safePromisifyCallFn } = require('../../lib/utils');
-const CloutAPIRoute = require('../CloutApiRoute');
-
 const request = require('express/lib/request');
+const { safePromisifyCallFn } = require('../../lib/utils');
 
-request.param = function (name) {
+const expressRequestParam = request.param;
+
+request.param = function cloutParam(name) {
   const { _params } = this;
 
-  return _params[name];
+  return _params[name] || expressRequestParam.apply(this, [name]);
 };
 
 module.exports = {
