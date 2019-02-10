@@ -15,7 +15,7 @@ module.exports = {
       });
 
       // attach hooks
-      this.hooks.map(method, attachHook);
+      this.hooks.map(hookFn => attachHook(method, hookFn));
 
       this.router[method](apiPath, this.handlePromisePostTriggers(fn));
     });
