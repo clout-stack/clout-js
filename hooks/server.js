@@ -62,15 +62,18 @@ module.exports = {
     priority: 25,
     fn(next) {
       if (!this.config.https) { return next(); }
+
       debug('Securely using https protocol');
-      const port = process.env.SSLPORT || this.config.https.port || 8443;
       const conf = this.config.https;
 
       if (!conf) { return next(); }
 
+      const port = process.env.SSLPORT || this.config.https.port || 8443;
+
       this.server.https = https.createServer(conf, this.app).listen(port);
       debug('https server started on port %s', this.server.https.address().port);
-      next();
+
+      return next();
     },
   },
   /**

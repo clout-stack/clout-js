@@ -3,3 +3,4 @@ node_modules/**
 docs/**
 test/**
 resources/**
+lib/commands/**

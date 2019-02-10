@@ -36,6 +36,8 @@ class CloutApiRoute {
     this.type = (this._opts.type || DEFAULT_TYPE).toLowerCase();
     this.isPublicFacing = this.type.includes('api');
 
+    const methods = this._opts.methods || [this._opts.method || DEFAULT_METHOD];
+
     switch (this.type) {
       case TYPES_DEFINITION.PARAM:
         this.param = this._opts.param;
@@ -44,7 +46,7 @@ class CloutApiRoute {
       default:
         this.path = this._opts.path;
         this.hooks = this._opts.hooks || [];
-        this.methods = (this._opts.methods || [this._opts.method || DEFAULT_METHOD]).map(method => method.toLowerCase());
+        this.methods = (methods).map(method => method.toLowerCase());
         this.params = this._opts.params; // TODO:- time to start packing modules? clout-swagger
         break;
     }
@@ -64,14 +66,14 @@ class CloutApiRoute {
      */
   handlePromisePostTriggers(fn) {
     const { isPublicFacing } = this;
-    return function (req, resp, next, ...args) {
+    return function postPromiseHandle(req, resp, next, ...args) {
       safePromisifyCallFn(fn, this, [req, resp, null, ...args])
         .then((data) => {
           if (isPublicFacing) {
             return resp.ok(data);
           }
 
-          next(null, data);
+          return next(null, data);
         })
         .catch(err => next(err));
     };

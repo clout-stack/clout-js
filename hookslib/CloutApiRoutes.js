@@ -7,10 +7,39 @@
 const { merge } = require('lodash');
 const express = require('express');
 const path = require('path');
-const CloutApiRoute = require('../hookslib/CloutApiRoute');
+const CloutApiRoute = require('./CloutApiRoute');
 const utils = require('../lib/utils');
 
 const PRIORITIZED_FILES = ['index.js', 'clout.hook.js'];
+
+/**
+ * Sort array by PRIORITIZED_FILES
+ * @param {string} a string
+ * @param {string} b string
+ */
+function sortByPriority(a, b) {
+  const keys = {a, b};
+  const getPriorityFor = key => PRIORITIZED_FILES.indexOf(keys[key]);
+  const priorityIndexForA = getPriorityFor(a);
+  const bPriority = getPriorityFor(b);
+  const weight = {
+    a: priorityIndexForA + 1,
+    b: bPriority + 1,
+  };
+
+  const bBiggerThanA = weight.b > weight.a;
+  const aBiggerThanB = weight.a > weight.b;
+
+  if (aBiggerThanB) {
+    return 1;
+  }
+
+  if (bBiggerThanA) {
+    return -1;
+  }
+
+  return 0;
+}
 
 /**
  * CloutApiRoutes
@@ -58,7 +87,7 @@ class CloutApiRoutes {
      * Attaches router to clout-app
      */
   attachRouterToApp() {
-    const basePath = this.config.basePath;
+    const {basePath} = this.config;
 
     this.clout.app.use(basePath, this.router);
     this.clout.logger.debug(`router attached at ${basePath}`);
@@ -105,20 +134,7 @@ class CloutApiRoutes {
   loadAPIsFromDir(dir) {
     const globbedDirs = utils.getGlobbedFiles(path.join(dir, '**/**.js'));
 
-    return globbedDirs.sort((a, b) => {
-      const aPriority = PRIORITIZED_FILES.indexOf(a) !== -1;
-      const bPriority = PRIORITIZED_FILES.indexOf(b) !== -1;
-      const weight = { a: 0, b: 0 };
-
-      if (aPriority !== -1) {
-        weight.a = aPriority + 1;
-      }
-      if (bPriority !== -1) {
-        weight.b = aPriority + 1;
-      }
-
-      return weight.a > weight.b ? 1 : weight.b > weight.a ? -1 : 0;
-    }).map(filePath => this.loadAPIFromFile(filePath));
+    return globbedDirs.sort(sortByPriority).map(filePath => this.loadAPIFromFile(filePath));
   }
 
   /**
