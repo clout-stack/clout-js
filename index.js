@@ -9,9 +9,9 @@ const Clout = require('./lib/Clout');
 let applicationDir;
 
 if (process.env.APPLICATION_DIR) {
-	applicationDir = process.env.APPLICATION_DIR;
+  applicationDir = process.env.APPLICATION_DIR;
 } else if (module && module.parent) {
-	applicationDir = path.dirname(module.parent.filename);
+  applicationDir = path.dirname(module.parent.filename);
 }
 
 /**
@@ -20,7 +20,7 @@ if (process.env.APPLICATION_DIR) {
  * @return directory that called module first
  */
 if (!applicationDir) {
-	throw new Error('application not found');
+  throw new Error('application not found');
 }
 
 module.exports = new Clout(applicationDir);
