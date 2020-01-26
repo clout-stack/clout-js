@@ -1,4 +1,4 @@
-import '@types/express';
+import {Express} from 'express';
 
 declare global {
     namespace Clout {
@@ -26,4 +26,3 @@ export interface CloutResponse extends Express.Response {
     error(body: any);
     unauthorized(body: any);
 }
-

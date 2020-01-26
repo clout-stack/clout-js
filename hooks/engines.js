@@ -119,7 +119,13 @@ module.exports = {
         }
 
         // do original render
-        return this._render.call(this, viewFilePath, opts, cb);
+        return this._render.call(this, viewFilePath, opts, (err, response) => {
+          if (err) {
+            console.error({err}, 'failed to render');
+          }
+
+          cb(err, response);
+        });
       };
       next();
     },
