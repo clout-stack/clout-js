@@ -3,9 +3,10 @@ module.exports = {
   fn(fn) {
     const apiPath = this.path && `${this.path}.:acceptType?`;
 
-    function attachHook(method, hookFn) {
-      return this.router[method](apiPath, this.handlePromisePostTriggers(hookFn));
-    }
+    const attachHook = (method, hookFn) => this.router[method](
+      apiPath,
+      this.handlePromisePostTriggers(hookFn),
+    );
 
     this.methods.forEach((method) => {
       // attach logging
