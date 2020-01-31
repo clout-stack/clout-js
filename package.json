@@ -1,6 +1,6 @@
 {
   "name": "clout-js",
-  "version": "2.1.0-beta.2",
+  "version": "2.1.0-beta.4",
   "description": "Clean, simplistic, enterprise grade full-stack NodeJS framework",
   "main": "index.js",
   "scripts": {
@@ -44,7 +44,7 @@
     "compression": "^1.7.1",
     "cookie-parser": "^1.4.3",
     "debug": "^3.1.0",
-    "ejs": "^2.5.7",
+    "ejs": "^3.0.1",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
     "fs-extra": "^5.0.0",
@@ -57,7 +57,7 @@
     "winston-daily-rotate-file": "^1.7.2"
   },
   "devDependencies": {
-    "@types/express": "^4.16.1",
+    "@types/express": "^4.17.2",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.16.0",
