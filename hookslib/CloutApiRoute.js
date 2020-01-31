@@ -76,7 +76,6 @@ class CloutApiRoute {
           } else {
             return next(null, data);
           }
-
         })
         .catch(err => next(err));
     };
