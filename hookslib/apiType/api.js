@@ -1,3 +1,5 @@
+const debug = require('debug')('clout-js:api');
+
 module.exports = {
   name: 'api',
   fn(fn) {
@@ -5,7 +7,7 @@ module.exports = {
 
     const attachHook = (method, hookFn) => this.router[method](
       apiPath,
-      this.handlePromisePostTriggers(hookFn),
+      this.handlePromisePostTriggers(hookFn, false),
     );
 
     this.methods.forEach((method) => {
@@ -16,7 +18,19 @@ module.exports = {
       });
 
       // attach hooks
-      this.hooks.map(hookFn => attachHook(method, hookFn));
+      this.hooks
+        .filter(hookFn => {
+          const isFunction = typeof hookFn === 'function';
+          if (!isFunction) {
+            console.error({apiPath, isFunction}, 'hook is not a function');;
+          }
+
+          return isFunction;
+        })
+        .map(hookFn => {
+          debug({method, hookFn}, 'attaching hookFn for method');
+          return attachHook(method, hookFn);
+        });
 
       this.router[method](apiPath, this.handlePromisePostTriggers(fn));
     });

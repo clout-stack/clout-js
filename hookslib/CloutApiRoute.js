@@ -3,6 +3,7 @@
  * Copyright(c) 2018 Muhammad Dadu
  * MIT Licensed
  */
+const debug = require('debug')('clout-js:api')
 const { safePromisifyCallFn } = require('../lib/utils');
 const types = require('./apiType');
 
@@ -64,13 +65,17 @@ class CloutApiRoute {
      * handles router method in a promise
      * @param {*} fn RouterCallback
      */
-  handlePromisePostTriggers(fn) {
-    const { isPublicFacing } = this;
+  handlePromisePostTriggers(fn, _isPublicFacing) {
+    const { isPublicFacing } = typeof _isPublicFacing !== 'undefined' ? _isPublicFacing : this;
     return function postPromiseHandle(req, resp, next, ...args) {
       safePromisifyCallFn(fn, this, [req, resp, null, ...args])
         .then((data) => {
+          const headerSent = !!resp._header;
+          debug(req.url, 'isPublicFacing', isPublicFacing)
+          debug(req.url, 'headerSent', headerSent)
+          debug('data', data);
           if (isPublicFacing) {
-            if (!resp.headerSent) {
+            if (!headerSent) {
               return resp.ok(data);
             }
           } else {
