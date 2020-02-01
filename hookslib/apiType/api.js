@@ -1,3 +1,23 @@
+const debug = require('debug')('clout-js:api');
+const { safePromisifyCallFn } = require('../../lib/utils');
+
+/**
+ * handles API fn method in a promise
+ * @param {*} fn RouterCallback
+ * @param {boolean} isPublicFacing isPublicFacing
+ */
+function handlePromiseAPIDef(fn) {
+  return function postPromiseHandle(req, resp, next, ...args) {
+    safePromisifyCallFn(fn, this, [req, resp, null, ...args])
+      .then((data) => {
+        if (!resp.headerSent) {
+          return resp.ok(data);
+        }
+      })
+      .catch(err => next(err));
+  };
+}
+
 module.exports = {
   name: 'api',
   fn(fn) {
@@ -5,7 +25,7 @@ module.exports = {
 
     const attachHook = (method, hookFn) => this.router[method](
       apiPath,
-      this.handlePromisePostTriggers(hookFn),
+      (req, resp, next, ...args) => safePromisifyCallFn(hookFn, this, [req, resp, next, ...args]),
     );
 
     this.methods.forEach((method) => {
@@ -16,9 +36,21 @@ module.exports = {
       });
 
       // attach hooks
-      this.hooks.map(hookFn => attachHook(method, hookFn));
+      this.hooks
+        .filter((hookFn) => {
+          const isFunction = typeof hookFn === 'function';
+          if (!isFunction) {
+            console.error({apiPath, isFunction}, 'hook is not a function');
+          }
 
-      this.router[method](apiPath, this.handlePromisePostTriggers(fn));
+          return isFunction;
+        })
+        .map((hookFn) => {
+          debug({method, hookFn}, 'attaching hookFn for method');
+          return attachHook(method, hookFn);
+        });
+
+      this.router[method](apiPath, handlePromiseAPIDef(fn));
     });
   },
 };
