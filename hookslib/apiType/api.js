@@ -19,15 +19,15 @@ module.exports = {
 
       // attach hooks
       this.hooks
-        .filter(hookFn => {
+        .filter((hookFn) => {
           const isFunction = typeof hookFn === 'function';
           if (!isFunction) {
-            console.error({apiPath, isFunction}, 'hook is not a function');;
+            console.error({apiPath, isFunction}, 'hook is not a function');
           }
 
           return isFunction;
         })
-        .map(hookFn => {
+        .map((hookFn) => {
           debug({method, hookFn}, 'attaching hookFn for method');
           return attachHook(method, hookFn);
         });

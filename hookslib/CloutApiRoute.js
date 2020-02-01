@@ -3,7 +3,7 @@
  * Copyright(c) 2018 Muhammad Dadu
  * MIT Licensed
  */
-const debug = require('debug')('clout-js:api')
+const debug = require('debug')('clout-js:api');
 const { safePromisifyCallFn } = require('../lib/utils');
 const types = require('./apiType');
 
@@ -71,8 +71,8 @@ class CloutApiRoute {
       safePromisifyCallFn(fn, this, [req, resp, null, ...args])
         .then((data) => {
           const headerSent = !!resp._header;
-          debug(req.url, 'isPublicFacing', isPublicFacing)
-          debug(req.url, 'headerSent', headerSent)
+          debug(req.url, 'isPublicFacing', isPublicFacing);
+          debug(req.url, 'headerSent', headerSent);
           debug('data', data);
           if (isPublicFacing) {
             if (!headerSent) {
