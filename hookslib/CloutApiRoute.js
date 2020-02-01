@@ -70,10 +70,12 @@ class CloutApiRoute {
       safePromisifyCallFn(fn, this, [req, resp, null, ...args])
         .then((data) => {
           if (isPublicFacing) {
-            return resp.ok(data);
+            if (!resp.headerSent) {
+              return resp.ok(data);
+            }
+          } else {
+            return next(null, data);
           }
-
-          return next(null, data);
         })
         .catch(err => next(err));
     };
