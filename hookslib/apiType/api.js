@@ -1,4 +1,22 @@
 const debug = require('debug')('clout-js:api');
+const { safePromisifyCallFn } = require('../../lib/utils');
+
+/**
+ * handles API fn method in a promise
+ * @param {*} fn RouterCallback
+ * @param {boolean} isPublicFacing isPublicFacing
+ */
+function handlePromiseAPIDef(fn) {
+  return function postPromiseHandle(req, resp, next, ...args) {
+    safePromisifyCallFn(fn, this, [req, resp, null, ...args])
+      .then((data) => {
+        if (!resp.headerSent) {
+          return resp.ok(data);
+        }
+      })
+      .catch(err => next(err));
+  };
+}
 
 module.exports = {
   name: 'api',
@@ -7,7 +25,7 @@ module.exports = {
 
     const attachHook = (method, hookFn) => this.router[method](
       apiPath,
-      this.handlePromisePostTriggers(hookFn, false),
+      (req, resp, next, ...args) => safePromisifyCallFn(hookFn, this, [req, resp, next, ...args]),
     );
 
     this.methods.forEach((method) => {
@@ -32,7 +50,7 @@ module.exports = {
           return attachHook(method, hookFn);
         });
 
-      this.router[method](apiPath, this.handlePromisePostTriggers(fn));
+      this.router[method](apiPath, handlePromiseAPIDef(fn));
     });
   },
 };
