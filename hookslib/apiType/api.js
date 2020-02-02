@@ -10,7 +10,8 @@ function handlePromiseAPIDef(fn) {
   return function postPromiseHandle(req, resp, next, ...args) {
     safePromisifyCallFn(fn, this, [req, resp, null, ...args])
       .then((data) => {
-        if (!resp.headerSent) {
+        const headerSent = !!resp._header;
+        if (!headerSent) {
           return resp.ok(data);
         }
       })
